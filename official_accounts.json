@@ -1,0 +1,47 @@
+{
+"info": {
+"accounts": {
+"youTube": "https://",
+"instagram": "https://",
+"gatabot_md": "https://",
+"gatabotlite_md": "https://",
+"facebook": "https://",
+"tiktok": "https://",
+"threads": "https://",
+"paypal": "https://",
+"github": "https://",
+"mail": "manuellove133@gmail.com",
+"all": "https://"
+},
+"channels": {
+"channel1": "https://",
+"channel2": "https:/",
+"channel3": "https://",
+"channel4": "https://"
+},
+"groups": {
+"group1": "https://",
+"group2": "https://",
+"group3": "https://",
+"group4": "https://",
+"group5": "https://",
+"group6": "https://"
+},
+"collaboration": {
+"group1": "",
+"group2": "https://",
+"group3": "https://",
+"group4": "https://"
+},
+"sponsors": {
+"boxmine": "https://",
+"SkyUltraPlus": "https://",
+"vortexus": "https://"
+},
+"others": {
+"assistance_num": "https://",
+"yt_vid": "https://",
+"group_support": "https://"
+}
+}
+}
