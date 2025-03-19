@@ -131,7 +131,7 @@ rows: [
 ]},
 { title: "Ⓜ️ Menú", highlight_label: "Popular",
 rows: [
-{ "header": "⭐ Menú completo", "title": "", "description": "Visita todos los comandos", "id": "allmenu" }
+{ header: "⭐ Menú completo", title: "", description: "Visita todos los comandos", id: usedPrefix + "allmenu" }
 ]}
 ]})
 const interactiveMessage = {
@@ -144,7 +144,7 @@ buttonParamsJson
 }]
 }}
 const message = { messageContextInfo: { deviceListMetadata: {}, deviceListMetadataVersion: 2 }, interactiveMessage }
-await conn.relayMessage(m.chat, { viewOnceMessage: { message } }, {})
+await conn.sendMessage(m.chat, interactiveMessage);
       
 } else { 
 let menu = `${lenguajeGB['smsConfi2']()} *${user.genero === 0 ? '👤' : user.genero == 'Ocultado 🕶️' ? `🕶️` : user.genero == 'Mujer 🚺' ? `🚺` : user.genero == 'Hombre 🚹' ? `🚹` : '👤'} ${user.registered === true ? user.name : taguser} 💖*
