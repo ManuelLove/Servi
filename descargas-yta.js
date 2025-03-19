@@ -4,7 +4,7 @@ import fs from 'fs';
 import axios from 'axios';
 import ffmpeg from 'fluent-ffmpeg';
 
-case 'ytmp3': {
+const 'ytmp3': {
     console.log("✅ Ejecutando ytmp3 con URL:", text);
     if (!text) return m.reply("🔹 Debes proporcionar una URL de YouTube.");
     if (!isUrl(text)) return m.reply("❌ URL no válida.");

@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import fs from 'fs';
 import axios from 'axios';
 
-case 'ytmp4': {
+const 'ytmp4': {
     console.log("✅ Ejecutando ytmp4 con URL:", text);
     if (!text) return m.reply("🔹 Debes proporcionar una URL de YouTube.");
     if (!isUrl(text)) return m.reply("❌ URL no válida.");
