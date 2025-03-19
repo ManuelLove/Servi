@@ -110,68 +110,15 @@ let menu = `⎔ \`\`\`${horarioFecha}\`\`\`
 ⊜ *Experiencia ➟* ${exp} ⚡
 ⊜ *Diamantes ➟* ${limit} 💎
 ⊜ *GataCoins ➟* ${money} 🐈
-⊜ *Tokens ➟* ${joincount} 🪙
+⊜ *Tokens ➟* ${joincount} 🪙`.trim()
       
-*╭━〔 🐈 OPCIONES DE MENU 🐈 〕⬣*
-┃
-┃Ⓜ️ _*MENÚ COMPLETO*_ Ⓜ️
-┃➺ _${usedPrefix}menucompleto | allmenu_
-┃
-┃🔊 _*MENÚ DE AUDIOS*_ 🔊
-┃➺ _${usedPrefix}menuaudio | menuaudios_
-┃
-┃💫 _${lenguajeGB['smsTex13']()}_ 💫
-┃➺ _${usedPrefix}infomenu_
-┃
-┃👾 _${lenguajeGB['smsTex10']()}_ 👾
-┃➺ _${usedPrefix}juegosmenu_
-┃
-┃🚀 _${lenguajeGB['smsTex9']()}_ 🚀
-┃➺ _${usedPrefix}descargasmenu_
-┃
-┃🔐 _${lenguajeGB['smsTex11']()}_ 🔐
-┃➺ _${usedPrefix}grupomenu_
-┃
-┃🧸 _${lenguajeGB['smsTex22']()}_ 🧸
-┃➺ _${usedPrefix}stickermenu_
-┃
-┃🛠️ _${lenguajeGB['smsTex12']()}_ 🛠️
-┃➺ _${usedPrefix}herramientasmenu_
-┃
-┃⛩️ _${lenguajeGB['smsTex23']()}_ ⛩️
-┃➺ _${usedPrefix}randommenu_
-┃
-┃🛰️ _${lenguajeGB['smsTex8']()}_ 🛰️
-┃➺ _${usedPrefix}convertidormenu_
-┃
-┃🎈 _${lenguajeGB['smsTex1']()}_🎈
-┃➺ _${usedPrefix}buscarmenu_
-┃
-┃🎧 _${lenguajeGB['smsTex2']()}_ 🎧
-┃➺ _${usedPrefix}audioefectomenu_
-┃
-┃🔞 _${lenguajeGB['smsTex3']()}_ 🔞
-┃➺ _${usedPrefix}menu18 | hornymenu_
-┃
-┃⚗️ _${lenguajeGB['smsTex21']()}_ ⚗️
-┃➺ _${usedPrefix}rpgmenu_
-┃
-┃⛺ _${lenguajeGB['smsTex14']()}_ ⛺
-┃➺ _${usedPrefix}makermenu_
-┃
-┃💮 _${lenguajeGB['smsTex15']()}_ 💮
-┃➺ _${usedPrefix}menulogos2_
-┃
-┃🌅 _${lenguajeGB['smsTex15']()}_ 🌅
-┃➺ _${usedPrefix}menulogos2_
-┃
-┃💎 _${lenguajeGB['smsTex20']()}_ 💎
-┃➺ _${usedPrefix}ownermenu_
-┃
-┃✅ *_CUENTAS OFICIALES GATABOT_* ✅
-┃➺ _${usedPrefix}cuentasgatabot | cuentasgb_
-┃
-*╰━━━━━━━━━━━━━⬣*`.trim()
+const buttonParamsJson = JSON.stringify({
+title: "VER LISTA",
+description: "Infórmate por medios oficiales sobre GataBot",
+sections: [
+{ title: "Ⓜ️ Menú", highlight_label: "Popular",
+rows: [
+{ header: "⭐ Menú completo", title: "", description: "Visita todos los comandos", id: usedPrefix + "allmenu" }
 ]}
 ]})
 const interactiveMessage = {
