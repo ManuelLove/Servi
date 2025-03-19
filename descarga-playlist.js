@@ -2,8 +2,8 @@ import { generateWAMessageContent, generateWAMessageFromContent, proto } from '@
 import yts from 'yt-search';
 
 let handler = async (m, { conn, usedPrefix, text, args, command }) => {
-  if (!text) return m.reply(`Ejemplo : ${usedPrefix + command} historia de anime`); fkontak,  m)
-m.react('📀');
+  if (!text) return m.reply(`Ejemplo : ${usedPrefix + command} historia de anime`);
+    m.react('📀');  // Reacción añadida
 
   try {
     let search = await yts(text);
