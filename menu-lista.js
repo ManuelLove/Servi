@@ -175,16 +175,16 @@ let menu = `⎔ \`\`\`${horarioFecha}\`\`\`
       
 const buttonParamsJson = JSON.stringify({
 title: "VER LISTA",
-description: "Infórmate por medios oficiales sobre GataBot",
+description: "Infórmate por medios oficiales sobre Techfix Bot",
 sections: [
 { title: "Ⓜ️ Menú", highlight_label: "Popular",
 rows: [
-{ header: "⭐ Menú completo", title: "", description: ".allmenu", id: usedPrefix + "allmenu" }
+{ header: "⭐ Menú completo", title: "", description: "Usar: .allmenu", id: usedPrefix + "allmenu" }
 ]}
 ]})
 const interactiveMessage = {
 body: { text: menu },
-footer: { text: wm + ` \nSi algo no funciona utilice el comando *${usedPrefix}menu2*` },
+footer: { text: wm + ` \nSi algo no funciona utilice el comando *${usedPrefix}reporte*` },
 header: { title: `⭐ *------- NUEVO MENÚ -------* ⭐\n${lenguajeGB['smsConfi2']()} *${user.genero === 0 ? '👤' : user.genero == 'Ocultado 🕶️' ? `🕶️` : user.genero == 'Mujer 🚺' ? `🚺` : user.genero == 'Hombre 🚹' ? `🚹` : '👤'} ${user.registered === true ? user.name : taguser} 💖*`, subtitle: "test4", hasMediaAttachment: false },
 nativeFlowMessage: { buttons: [{ 
 name: "single_select",
