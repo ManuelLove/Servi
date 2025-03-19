@@ -2403,10 +2403,25 @@ conn.reply(m.chat, `${lenguajeGB['smsAvisoAG']()}*EL PASATIEMPO "${pasatiempoSel
 return
 }} else {
 if (text) return
-await conn.sendEvent(m.chat, gt + " - Primera lista de pasatiempos.", `🌟 *SELECCIONE MÍNIMO UN PASATIEMPO Y MÁXIMO CINCO PASATIEMPOS*\n\n*Para seleccionar varios pasatiempos separé por comas (,) además puede usar números o emojis numéricos, ejemplo:*\n\n✪ *(1 pasatiempo)*\n✓ \`\`\`${usedPrefix + command} 2️⃣\`\`\`\n\n✪ *(2 pasatiempos)*\n✓ \`\`\`${usedPrefix + command} 45, 65\`\`\`\n\n✪ *(3 pasatiempos)*\n✓ \`\`\`${usedPrefix + command} 2️⃣4️⃣, 1️⃣5️⃣6️⃣, 8️⃣9️⃣\`\`\`\n\n✪ *(4 pasatiempos)*\n✓ \`\`\`${usedPrefix + command} 223, 456, 6, 4\`\`\`\n\n✪ *(5 pasatiempos)*\n✓ \`\`\`${usedPrefix + command} 56, 5️⃣1️⃣6️⃣, 345, 2️⃣4️⃣, 200\`\`\`\n\n_Si quieres que este un pasatiempo que no forma parte de esta lista contacta con los creadores de este bot._\n\n⚠️ _Puedes omitir agregar pasatiempos con el comando *#finalizar* pero ten en cuenta que si omites agregar pasatiempos no recibirás recompensas ni tiempo premium gratis y algunos datos no se registrarán porque tú registro será considerado *"Registro rápido"*._\n\n${yyr1}`, "Toca para ver más\n" + yyr1 + "\n\nPara ver más pasatiempo revise los otros mensajes del bot.", false)
-await conn.sendEvent(m.chat, "Segunda lista de pasatiempos.", `*Para ver las idicaciones para seleccionar pasatiempos, dirígete al primer mensaje del evento.*\n\n_Si quieres que este un pasatiempo que no forma parte de esta lista contacta con los creadores de este bot._`, "Toca para ver más\n" + yyr2 + "\n\nPara ver más pasatiempos revise los otros mensajes del bot.", false)
-await conn.sendEvent(m.chat, "Tercera lista de pasatiempos.", `*Para ver las idicaciones para seleccionar pasatiempos, dirígete al primer mensaje del evento.*`, "Toca para ver más\n" + yyr3 + "\n\nPara ver más pasatiempos revise los otros mensajes del bot.", false)
-await conn.sendEvent(m.chat, "Última lista de pasatiempos.", `*Para ver las idicaciones para seleccionar pasatiempos, dirígete al primer mensaje del evento.*`, "Toca para ver más\n" + yyr4 + "\n\nMás pasatiempos próximamente...", false)
+let mensaje1 = `🌟 *SELECCIONE MÍNIMO UN PASATIEMPO Y MÁXIMO CINCO PASATIEMPOS* 🌟\n\n
+*Para seleccionar varios pasatiempos separa por comas (,), además puedes usar números o emojis numéricos. Ejemplo:*\n
+✪ *(1 pasatiempo)*\n✓ \`${usedPrefix + command} 2️⃣\`\n
+✪ *(2 pasatiempos)*\n✓ \`${usedPrefix + command} 45, 65\`\n
+✪ *(3 pasatiempos)*\n✓ \`${usedPrefix + command} 2️⃣4️⃣, 1️⃣5️⃣6️⃣, 8️⃣9️⃣\`\n
+✪ *(4 pasatiempos)*\n✓ \`${usedPrefix + command} 223, 456, 6, 4\`\n
+✪ *(5 pasatiempos)*\n✓ \`${usedPrefix + command} 56, 5️⃣1️⃣6️⃣, 345, 2️⃣4️⃣, 200\`\n
+⚠️ _Si no agregas pasatiempos, tu registro será considerado *"Registro rápido"*, sin recompensas._\n\n${yyr1}`;
+
+let mensaje2 = `📜 *Segunda lista de pasatiempos.*\n\n_Si quieres que se agregue un pasatiempo que no está en la lista, contacta con los creadores._\n\n${yyr2}`;
+
+let mensaje3 = `📜 *Tercera lista de pasatiempos.*\n\n_Para ver las indicaciones para seleccionar pasatiempos, revisa el primer mensaje._\n\n${yyr3}`;
+
+let mensaje4 = `📜 *Última lista de pasatiempos.*\n\n_Más pasatiempos próximamente..._\n\n${yyr4}`;
+
+await conn.sendMessage(m.chat, { text: mensaje1 }, { quoted: m });
+await conn.sendMessage(m.chat, { text: mensaje2 }, { quoted: m });
+await conn.sendMessage(m.chat, { text: mensaje3 }, { quoted: m });
+await conn.sendMessage(m.chat, { text: mensaje4 }, { quoted: m });
 }}
 seleccionarPasatiempos(seleccion)
 }	
