@@ -37,7 +37,7 @@ const selectedQuality = validQualities.includes(quality) ? quality : '320';
 
 const audioApis = [
 { url: () => ogmp3.download(yt_play[0].url, selectedQuality, 'audio'), extract: (data) => ({ data: data.result.download, isDirect: false }) },
-{ url: () => ytmp3(args), extract: (data) => ({ data, isDirect: true }) },
+{ url: () => fetch(`https://api.siputzx.my.id/api/d/ytmp3?url=${args}`).then(res => res.json()), extract: (data) => ({ data, isDirect: true }) },
 { url: () => fetch(`https://api.neoxr.eu/api/youtube?url=${args}&type=audio&quality=128kbps&apikey=GataDios`).then(res => res.json()), extract: (data) => ({ data: data.data.url, isDirect: false }) },
 { url: () => fetch(`https://api.fgmods.xyz/api/downloader/ytmp4?url=${args}&apikey=${fgkeysapi}`).then(res => res.json()), extract: (data) => ({ data: data.result.dl_url, isDirect: false }) },
 { url: () => fetch(`https://api.siputzx.my.id/api/d/ytmp4?url=${yt_play[0].url}`).then(res => res.json()), extract: (data) => ({ data: data.dl, isDirect: false }) },
