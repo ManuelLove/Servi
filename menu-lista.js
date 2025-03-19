@@ -244,7 +244,7 @@ console.log(e)}}
 
 handler.command = /^(menu|menú|memu|memú|help|2help|commands|commandos)$/i
 //handler.register = true
-export default handler
+export default handler;
 
 const more = String.fromCharCode(8206)
 const readMore = more.repeat(4001)
