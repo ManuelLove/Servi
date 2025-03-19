@@ -110,9 +110,8 @@ let menu = `⎔ \`\`\`${horarioFecha}\`\`\`
 ⊜ *Experiencia ➟* ${exp} ⚡
 ⊜ *Diamantes ➟* ${limit} 💎
 ⊜ *GataCoins ➟* ${money} 🐈
-⊜ *Tokens ➟* ${joincount} 🪙`.trim()      
-]}
-]})
+⊜ *Tokens ➟* ${joincount} 🪙`.trim()
+      
 const interactiveMessage = {
 body: { text: menu },
 footer: { text: wm + ` \nSi algo no funciona utilice el comando *${usedPrefix}menu2*` },
