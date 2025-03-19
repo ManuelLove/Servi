@@ -1,8 +1,5 @@
 // Botones interactivos adptados y funcionando por Gata Dios (GataNina-Li)
-// if (!m.isWABusiness && !/web|desktop|unknown/gi.test(dispositivo)) {  
-//     const message = { messageContextInfo: { deviceListMetadata: {}, deviceListMetadataVersion: 2 }, interactiveMessage };
-//     await conn.relayMessage(m.chat, { viewOnceMessage: { message } }, {});
-// }
+
 //QUEDO OBSOLETO DE NUEVO CULPA DE WHATSAPP BUG :v
 import { getDevice } from '@whiskeysockets/baileys'
 import fs from 'fs'
@@ -115,6 +112,7 @@ let menu = `⎔ \`\`\`${horarioFecha}\`\`\`
 ⊜ *GataCoins ➟* ${money} 🐈
 ⊜ *Tokens ➟* ${joincount} 🪙`.trim()
       
+/* 
 const buttonParamsJson = JSON.stringify({
 title: "VER LISTA",
 description: "Infórmate por medios oficiales sobre GataBot",
@@ -148,6 +146,7 @@ buttonParamsJson
 }}
 const message = { messageContextInfo: { deviceListMetadata: {}, deviceListMetadataVersion: 2 }, interactiveMessage }
 await conn.relayMessage(m.chat, { viewOnceMessage: { message } }, {})
+*/
       
 } else { 
 let menu = `${lenguajeGB['smsConfi2']()} *${user.genero === 0 ? '👤' : user.genero == 'Ocultado 🕶️' ? `🕶️` : user.genero == 'Mujer 🚺' ? `🚺` : user.genero == 'Hombre 🚹' ? `🚹` : '👤'} ${user.registered === true ? user.name : taguser} 💖*
