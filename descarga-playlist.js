@@ -1,4 +1,4 @@
-import { generateWAMessageContent, proto } from '@whiskeysockets/baileys';
+import { generateWAMessageContent, generateWAMessageFromContent, proto } from '@whiskeysockets/baileys';
 import yts from 'yt-search';
 
 let handler = async (m, { conn, usedPrefix, text, args, command }) => {
