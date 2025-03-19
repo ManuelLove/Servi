@@ -1,5 +1,4 @@
 import fs from 'fs';
-import fetch from 'node-fetch';
 import similarity from 'similarity';
 
 let timeout = 60000;  //60s
@@ -15,41 +14,12 @@ const archivosRespaldo = {
 };
 
 async function obtenerPregunta(tipo) {
-    let prompt = "";
-    if (tipo === "acertijo") {
-        prompt = "Genera un acertijo con su respuesta en formato JSON: {\"question\": \"<pregunta>\", \"response\": \"<respuesta>\"}. Solo genera el JSON sin ningún comentario adicional.";
-    } else if (tipo === "pelicula") {
-        prompt = "Genera un juego de adivinar película usando emojis como pista, en formato JSON: {\"question\": \"<pregunta>\", \"response\": \"<respuesta>\"}. Solo genera el JSON sin ningún comentario adicional.";
-    } else if (tipo === "trivia") {
-        prompt = "Genera una pregunta de trivia con opciones múltiples en formato JSON, siguiendo este formato: {\"question\": \"<pregunta>\\n\\nA) ...\\n\\nB) ...\\n\\nC) ...\", \"response\": \"<letra de la respuesta correcta>\"}. Solo genera el JSON sin ningún comentario adicional.";
-    }
-
-    try {
-        let gpt = await fetch(`${apis}/ia/gptweb?text=${encodeURIComponent(prompt)}`);
-        let res = await gpt.json();
-        if (res.data) {
-            let dataText = res.data;
-            const match = dataText.match(/```json\s*([\s\S]*?)\s*```/);
-            if (match) {
-                dataText = match[1];
-            }
-            try {
-                return JSON.parse(dataText);
-            } catch (error) {
-                console.error("Error al parsear JSON de la API:", error);
-            }
-        }
-    } catch (error) {
-        console.error(`Error en la API para ${tipo}:`, error);
-    }
-
-    // Si la API falla, usar preguntas del archivo local y evitar repetir la última
     try {
         let archivo = `./src/game/${archivosRespaldo[tipo]}`;
         let data = JSON.parse(fs.readFileSync(archivo));
-        
+
         let preguntaNueva;
-        let intentos = 10; // Evita loops infinitos
+        let intentos = 10; // Evita repetir la última pregunta hasta 10 intentos
 
         do {
             preguntaNueva = data[Math.floor(Math.random() * data.length)];
@@ -57,7 +27,6 @@ async function obtenerPregunta(tipo) {
         } while (juegos.ultimaPregunta === preguntaNueva.question && intentos > 0);
 
         juegos.ultimaPregunta = preguntaNueva.question; // Guarda la última pregunta usada
-
         return preguntaNueva;
     } catch (error) {
         console.error(`Error al leer el archivo ${archivo}:`, error);
@@ -67,15 +36,17 @@ async function obtenerPregunta(tipo) {
 
 let handler = async (m, { conn, command }) => {
     let id = m.chat;
-    if (juegos[id]) return conn.reply(m.chat, '❌️ Todavía hay un juegos sin responder en este chat', m);
+    if (juegos[id]) return conn.reply(m.chat, '❌️ Todavía hay un juego sin responder en este chat', m);
     try {
         let tipo = "";
         if (/^(acertijo|acert|adivinanza|tekateki)$/i.test(command)) tipo = "acertijo";
         else if (/^(advpe|adv|peliculas|pelicula)$/i.test(command)) tipo = "pelicula";
         else if (/^(trivia|triviador)$/i.test(command)) tipo = "trivia";
         if (!tipo) return;
+
         let pregunta = await obtenerPregunta(tipo);
-        if (!pregunta) return 
+        if (!pregunta) return;
+
         let caption = "";
         if (tipo === "acertijo") {      
             caption = `${pregunta.question}\n\n*• Tiempo:* ${(timeout / 1000)}s\n*• Bono:* +${poin} XP`;
@@ -85,7 +56,8 @@ let handler = async (m, { conn, command }) => {
         } else if (tipo === "trivia") {
             caption = `${pregunta.question}\n\n*• Tiempo:* ${(timeout2 / 1000)}s\n*• Bono:* +${poin} XP\n\n💫 Responde a este mensaje con la letra de la opción correcta ✅`;
         }
-        let enviado = await conn.reply(m.chat, caption, m)
+
+        let enviado = await conn.reply(m.chat, caption, m);
         juegos[id] = {
             tipo,
             pregunta,
@@ -97,7 +69,7 @@ let handler = async (m, { conn, command }) => {
                     delete juegos[id];
                 }
             }, tipo === "trivia" ? timeout2 : timeout)
-        }
+        };
     } catch (e) {
         console.error(e);
     }
@@ -129,13 +101,3 @@ handler.command = /^(acertijo|acert|adivinanza|tekateki|advpe|adv|peliculas|peli
 handler.register = true;
 
 export default handler;
-
-async function fetchJson(url, options) {
-    try {
-        options ? options : {};
-        const res = await axios({method: 'GET', url: url, headers: {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'}, ...options});
-        return res.data;
-    } catch (err) {
-        return err;
-    }
-}
