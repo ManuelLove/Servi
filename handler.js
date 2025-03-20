@@ -1671,7 +1671,7 @@ if (msg) return conn.relayMessage(m.chat, prep.message, { messageId: prep.key.id
 }
 
 import { fileURLToPath } from 'url';
-const file = fileURLToPath(import.meta.url);
+const file = typeof fileURLToPath !== 'undefined' ? fileURLToPath(import.meta.url) : import.meta.url;
 watchFile(file, async () => {
 unwatchFile(file)
 console.log(chalk.redBright('Update \'handler.js\''));
