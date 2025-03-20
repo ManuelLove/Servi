@@ -32,17 +32,17 @@ async function downloadYtdow3(link) {
     let data = await response.json();
     
     if (data.status) {
-      sho.sendMessage(m.chat, {
+      conn.sendMessage(m.chat, {
         audio: { url: data.data.dl },
         mimetype: 'audio/mpeg',
         fileName: 'audio.mp3',
       }, { quoted: m });
     } else {
-      reply("No se pudo descargar el audio. Verifica la URL.");
+      m.reply("No se pudo descargar el audio. Verifica la URL.");
     }
   } catch (err) {
     console.error('Error:', err.message);
-    reply(`Error: ${err.message}`);
+    m.reply(`Error: ${err.message}`);
   }
 }
 
@@ -53,16 +53,16 @@ async function downloadYtdow4(link) {
     let data = await response.json();
     
     if (data.status) {
-      sho.sendMessage(m.chat, {
+      conn.sendMessage(m.chat, {
         video: { url: data.data.dl },
         caption: 'Aquí está tu video 🎥'
       }, { quoted: m });
     } else {
-      reply("No se pudo descargar el video. Verifica la URL.");
+      m.reply("No se pudo descargar el video. Verifica la URL.");
     }
   } catch (err) {
     console.error('Error:', err.message);
-    reply(`Error: ${err.message}`);
+    m.reply(`Error: ${err.message}`);
   }
 }
 export async function handler(chatUpdate) {
@@ -1488,15 +1488,15 @@ console.log(`🔹 Comando recibido: ${command}, Texto: ${text}`);
 switch (action) {
 case 'ytdow3':
     updatePopularCommand(command); // Registra el comando
-    if (!text) return reply('Envia un enlace de YouTube.\nEjemplo: .ytdow3 https://youtu.be/xxxx');
-    if (!isUrl(text)) return reply('¡El enlace no es válido!');
+    if (!text) return m.reply('Envia un enlace de YouTube.\nEjemplo: .ytdow3 https://youtu.be/xxxx');
+    if (!isUrl(text)) return m.reply('¡El enlace no es válido!');
     await downloadYtdow3(text);
     break;
 
 case 'ytdow4':
     updatePopularCommand(command); // Registra el comando
-    if (!text) return reply('Envia un enlace de YouTube.\nEjemplo: .ytdow4 https://youtu.be/xxxx');
-    if (!isUrl(text)) return reply('¡El enlace no es válido!');
+    if (!text) return m.reply('Envia un enlace de YouTube.\nEjemplo: .ytdow4 https://youtu.be/xxxx');
+    if (!isUrl(text)) return m.reply('¡El enlace no es válido!');
     await downloadYtdow4(text);
     break;
 case 'add':
