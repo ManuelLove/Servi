@@ -4,12 +4,11 @@ import { format } from 'util'
 import { fileURLToPath } from 'url'
 import path, { join } from 'path'
 import { unwatchFile, watchFile } from 'fs'
+import fs from 'fs'
 import chalk from 'chalk'   
 import fetch from 'node-fetch'
 import './plugins/_content.js'
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-const fs = require('fs'); 
+ 
 /**
  * @type {import('@adiwajshing/baileys')}  
  */
@@ -41,7 +40,7 @@ const {
   mediafireDl,
   quotedLyo,
   simi
-} = require('./lib/screaper');
+import screaper from './lib/screaper.js';
 /**
  * Handle messages upsert
  * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['messages.upsert']} groupsUpdate 
