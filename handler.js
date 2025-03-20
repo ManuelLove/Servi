@@ -1485,6 +1485,7 @@ await loadDatabase()
 let chat = global.db.data.chats[id] || {}
 let text = ''
 switch (action) {
+console.log(`🔹 Comando recibido: ${command}, Texto: ${text}`);
 case 'ytdow3':
     updatePopularCommand(command); // Registra el comando
     if (!text) return reply('Envia un enlace de YouTube.\nEjemplo: .ytdow3 https://youtu.be/xxxx');
