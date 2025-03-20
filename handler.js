@@ -22,8 +22,8 @@ resolve()
  * Handle messages upsert
  * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['messages.upsert']} groupsUpdate 
  */
-const axios = require('axios');
-const ffmpeg = require('fluent-ffmpeg');
+import axios = require('axios');
+import ffmpeg = require('fluent-ffmpeg');
 
 async function downloadMp4(link) {
   try {
