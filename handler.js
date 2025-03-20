@@ -18,128 +18,49 @@ const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(function (
 clearTimeout(this)
 resolve()
 }, ms))
-import { ytMp3, ytMp4 } from './lib/screaper.js';
 /**
  * Handle messages upsert
  * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['messages.upsert']} groupsUpdate 
  */
+const fs = require('fs');
+const axios = require('axios');
+const path = require('path');
+const fetch = require('node-fetch');
+const ffmpeg = require('fluent-ffmpeg');
+
 async function downloadMp4(link) {
   try {
-    console.log('🕒 Memulai proses download MP4...');
-    sho.sendMessage(m.chat, {
-      react: { text: '🕒', key: m.key }
-    });
-
-    // Fetch data dari API
     let response = await fetch(`https://api.siputzx.my.id/api/d/ytmp4?url=${link}`);
-    let textResponse = await response.text();
-
-    // Validasi apakah respons adalah JSON
-    let data;
-    try {
-      data = JSON.parse(textResponse);
-    } catch (err) {
-      console.error('❌ Respons bukan JSON:', textResponse);
-      reply("Terjadi kesalahan pada API. Silakan coba lagi nanti.");
-      return;
-    }
-
-    console.log('📥 Respons diterima dari API:', data);
+    let data = await response.json();
 
     if (data.status) {
-      console.log('✅ Data valid, mengirim file video...');
       sho.sendMessage(m.chat, {
         video: { url: data.data.dl },
         caption: ''
       }, { quoted: m });
-      console.log('✅ Proses selesai, file video berhasil dikirim.');
     } else {
-      console.log('❌ Gagal mengambil video. URL tidak valid.');
       reply("Gagal mengambil video. Silakan periksa URL.");
     }
   } catch (err) {
-    console.error('❌ Terjadi kesalahan:', err.message);
     reply(`Error: ${err.message}`);
   }
 }
 
 async function downloadMp3(link) {
   try {
-    console.log('🕒 Memulai proses download MP3...');
-    sho.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-
-    // Panggil API untuk mendapatkan URL file
     let response = await fetch(`https://api.siputzx.my.id/api/d/ytmp3?url=${link}`);
-    let textResponse = await response.text();
-
-    let data;
-    try {
-      data = JSON.parse(textResponse);
-    } catch (err) {
-      console.error('❌ Respons bukan JSON:', textResponse);
-      reply("Terjadi kesalahan pada API. Silakan coba lagi nanti.");
-      return;
-    }
-
-    console.log('📥 Respons diterima dari API:', data);
+    let data = await response.json();
 
     if (data.status && data.data.dl) {
-      const fileUrl = data.data.dl;
-      const fileName = 'audio.mp3';
-      const fixedFileName = 'fixed_audio.mp3';
-      const filePath = path.join(__dirname, fileName);
-      const fixedFilePath = path.join(__dirname, fixedFileName);
-
-      // Unduh file audio
-      console.log('⏳ Mengunduh file audio...');
-      const writer = fs.createWriteStream(filePath);
-      const audioResponse = await axios({
-        url: fileUrl,
-        method: 'GET',
-        responseType: 'stream',
-      });
-
-      audioResponse.data.pipe(writer);
-
-      writer.on('finish', () => {
-        console.log('✅ File audio berhasil diunduh, memulai proses konversi...');
-
-        // Proses ulang file audio menggunakan ffmpeg
-        ffmpeg(filePath)
-          .toFormat('mp3') // Konversi ulang ke format MP3
-          .on('end', () => {
-            console.log('✅ File audio berhasil dikonversi.');
-
-            // Kirim file audio yang telah diperbaiki
-            sho.sendMessage(m.chat, {
-              audio: fs.readFileSync(fixedFilePath),
-              mimetype: 'audio/mpeg',
-              fileName: 'audio_fixed.mp3', // Nama file baru
-            }, { quoted: m });
-
-            // Hapus file sementara
-            fs.unlinkSync(filePath);
-            fs.unlinkSync(fixedFilePath);
-            console.log('✅ File audio berhasil dikirim dan file sementara dihapus.');
-          })
-          .on('error', (err) => {
-            console.error('❌ Gagal mengonversi file audio:', err.message);
-            reply('Gagal memproses ulang file audio.');
-          })
-          .save(fixedFilePath);
-      });
-
-      writer.on('error', (err) => {
-        console.error('❌ Gagal mengunduh file audio:', err.message);
-        reply('Gagal mengunduh file audio.');
-      });
-
+      sho.sendMessage(m.chat, {
+        audio: { url: data.data.dl },
+        mimetype: 'audio/mpeg',
+        fileName: 'audio.mp3',
+      }, { quoted: m });
     } else {
-      console.log('❌ Gagal mengambil audio. URL tidak valid.');
       reply("Gagal mengambil audio. Silakan periksa URL.");
     }
   } catch (err) {
-    console.error('❌ Terjadi kesalahan:', err.message);
     reply(`Error: ${err.message}`);
   }
 }
