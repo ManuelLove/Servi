@@ -1442,7 +1442,6 @@ if (global.db.data == null)
 await loadDatabase()
 let chat = global.db.data.chats[id] || {}
 let text = ''
-console.log("Mensaje recibido:", m.text);
 switch (action) {
 case 'add':
 case 'remove':
@@ -1636,3 +1635,6 @@ case 'ytmp4': {
     }
 }
 break;
+
+
+// ERROR: No se encontró un switch para insertar los comandos.
