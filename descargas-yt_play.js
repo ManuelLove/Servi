@@ -9,11 +9,9 @@ const handler = async (m, { conn, command, args, text, usedPrefix }) => {
   if (!text) return conn.reply(m.chat, `❌ Uso incorrecto. Ejemplo:\n${usedPrefix + command} Billie Eilish - Bellyache`, m);
   
   const yt_play = await search(args.join(' '));
-
   if (!yt_play.length) return conn.reply(m.chat, '❌ No se encontraron resultados.', m);
 
   const videoData = yt_play[0];
-
   tempStorage[m.sender] = { url: videoData.url, title: videoData.title };
 
   const message = `🎶 *${videoData.title}*\n📅 ${videoData.ago}\n⏳ ${secondString(videoData.duration.seconds)}\n👀 ${MilesNumber(videoData.views)}\n👤 ${videoData.author.name}\n🔗 ${videoData.url}`;
@@ -47,9 +45,9 @@ handler.before = async (m, { conn }) => {
     
     const response = await fetch(apiUrl);
     const data = await response.json();
-    if (!data.dl) throw new Error('No se pudo obtener el enlace de descarga.');
+    if (!data.status || !data.data || !data.data.dl) throw new Error('No se pudo obtener el enlace de descarga.');
 
-    const mediaUrl = data.dl;
+    const mediaUrl = data.data.dl;
     const fileSize = await getFileSize(mediaUrl);
 
     if (fileSize === 0) throw new Error('Error al obtener el tamaño del archivo.');
