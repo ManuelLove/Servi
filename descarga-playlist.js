@@ -94,7 +94,7 @@ handler.command = /^ytbuscar|playlist|yts(earch)?$/i;
 handler.limit = 1;
 handler.level = 3;
 
-async function ytmp3alt(m, { text }) {
+let handler = async (m, { conn, usedPrefix, text, args, command }) => {
     if (!text) return m.reply("🔹 Debes proporcionar una URL de YouTube.");
     if (!text.includes("youtube.com") && !text.includes("youtu.be")) return m.reply("❌ URL no válida.");
 
@@ -118,7 +118,7 @@ async function ytmp3alt(m, { text }) {
 
 module.exports = { handler: ytmp3alt, command: ['ytmp3alt'] };
 
-async function ytmp4alt(m, { text }) {
+let handler = async (m, { conn, usedPrefix, text, args, command }) => {
     if (!text) return m.reply("🔹 Debes proporcionar una URL de YouTube.");
     if (!text.includes("youtube.com") && !text.includes("youtu.be")) return m.reply("❌ URL no válida.");
 
