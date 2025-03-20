@@ -1,145 +1,52 @@
-import { generateWAMessageContent, generateWAMessageFromContent, proto } from '@whiskeysockets/baileys';
 import yts from 'yt-search';
-
 let handler = async (m, { conn, usedPrefix, text, args, command }) => {
-  if (!text) return m.reply(`Ejemplo : ${usedPrefix + command} historia de anime`);
-    m.react('📀');  // Reacción añadida
-
-  try {
-    let search = await yts(text);
-    if (!search.all.length) return m.reply("¡No se encontraron resultados de búsqueda!");
-
-    // Enviar mensaje de búsqueda
-    m.reply("🔍 Buscando en YouTube, por favor espera...");
-
-    const carouselCards = await Promise.all(search.all.slice(0, 5).map(async (video, index) => ({
-      header: {
-        title: `Resultados ${index + 1}`,
-        hasMediaAttachment: true,
-        imageMessage: (await generateWAMessageContent({
-          image: { url: video.thumbnail }
-        }, { upload: conn.waUploadToServer })).imageMessage
-      },
-      body: {
-        text: `🎥 *${video.title}*
-👁 *Vistas:* ${video.views}
-⏱ *Duración:* ${video.timestamp}
-📆 *Subido:* ${video.ago}
-📝 *Url:* ${video.url}`
-      },
-      footer: {
-        text: `Haga clic en el botón a continuación para ver o copiar el enlace.`
-      },
-      nativeFlowMessage: {
-        buttons: [
-          {
-            "name": "cta_copy",
-            "buttonParamsJson": JSON.stringify({
-              "display_text": "🎵MUSICA🎵",
-              "copy_code": `${usedPrefix}ytmp3 ${video.url}`
-            })
-          },
-          {
-            "name": "cta_copy",
-            "buttonParamsJson": JSON.stringify({
-              "display_text": "📺VIDEO📺",
-              "copy_code": `${usedPrefix}ytmp4 ${video.url}`
-            })
-          }
-        ]
-      }
-    })));
-
-    // Crear y enviar mensaje tipo carrusel
-    const carouselMessage = generateWAMessageFromContent(m.chat, {
-      viewOnceMessage: {
-        message: {
-          messageContextInfo: {
-            deviceListMetadata: {},
-            deviceListMetadataVersion: 2
-          },
-          interactiveMessage: proto.Message.InteractiveMessage.fromObject({
-            body: {
-              text: `🔎 *Resultados de búsqueda de YouTube para:* _${text}_`
-            },
-            footer: {
-              text: `Bot de YouTube`
-            },
-            header: {
-              hasMediaAttachment: false
-            },
-            carouselMessage: proto.Message.InteractiveMessage.CarouselMessage.fromObject({
-              cards: carouselCards
-            })
-          })
-        }
-      }
-    }, {});
-
-    await conn.relayMessage(m.chat, carouselMessage.message, {
-      messageId: carouselMessage.key.id
-    });
-
-  } catch (e) {
-    console.error("Error al procesar la búsqueda de YouTube:", e);
-    await conn.sendMessage(m.chat, {
-      text: "❌ Se produjo un error al realizar la búsqueda en YouTube. Inténtalo de nuevo."
-    }, { quoted: m });
-  }
-};
-
-handler.help = ['ytbuscar'];
-handler.tags = ['buscadores'];
-handler.command = /^ytbuscar|playlist|yts(earch)?$/i;
-handler.limit = 1;
-handler.level = 3;
-
-let handler = async (m, { conn, usedPrefix, text, args, command }) => {
-    if (!text) return m.reply("🔹 Debes proporcionar una URL de YouTube.");
-    if (!text.includes("youtube.com") && !text.includes("youtu.be")) return m.reply("❌ URL no válida.");
-
-    m.reply("⌛ Descargando audio, por favor espera...");
+if (!text) return conn.reply(m.chat, `${lenguajeGB['smsAvisoMG']()}𝙀𝙎𝘾𝙍𝙄𝘽𝘼 𝙀𝙇 𝙉𝙊𝙈𝘽𝙍𝙀 𝘿𝙀 𝙐𝙉 𝙑𝙄𝘿𝙀𝙊 𝙊 𝘾𝘼𝙉𝘼𝙇 𝘿𝙀 𝙔𝙊𝙐𝙏𝙐𝘽𝙀\n\n𝙒𝙍𝙄𝙏𝙀 𝙏𝙃𝙀 𝙉𝘼𝙈𝙀 𝙊𝙁 𝘼 𝙔𝙊𝙐𝙏𝙐𝘽𝙀 𝙑𝙄𝘿𝙀𝙊 𝙊𝙍 𝘾𝙃𝘼𝙉𝙉𝙀𝙇`, fkontak,  m)
+try {
+    let result = await yts(text);
+    let ytres = result.videos;
+  let teskd = `𝘽𝙪𝙨𝙦𝙪𝙚𝙙𝙖 𝙙𝙚 *${text}*`
     
-    try {
-        let response = await fetch(`https://api.siputzx.my.id/api/d/ytmp3?url=${text}`);
-        let data = await response.json();
-
-        if (data.status && data.data.dl) {
-            let audioUrl = data.data.dl;
-            conn.sendMessage(m.chat, { audio: { url: audioUrl }, mimetype: 'audio/mpeg' }, { quoted: m });
-        } else {
-            m.reply("❌ No se pudo descargar el audio.");
-        }
-    } catch (err) {
-        console.error("Error en ytmp3alt:", err);
-        m.reply("❌ Ocurrió un error al procesar tu solicitud.");
+let listSections = [];
+for (let index in ytres) {
+        let v = ytres[index];
+        listSections.push({
+         title: `${htki} 𝙍𝙀𝙎𝙐𝙇𝙏𝘼𝘿𝙊𝙎 ${htka}`,
+            rows: [
+                {
+                    header: '𝗔 𝗨 𝗗 𝗜 𝗢',
+                    title: "",
+                    description: `${v.title} | ${v.timestamp}\n`, 
+                    id: `${usedPrefix}ytmp3 ${v.url}`
+                },
+                {
+                    header: "𝗩 𝗜 𝗗 𝗘 𝗢",
+                    title: "" ,
+                    description: `${v.title} | ${v.timestamp}\n`, 
+                    id: `${usedPrefix}ytmp4 ${v.url}`
+                }, 
+              {
+                    header: "𝗔 𝗨 𝗗 𝗜 𝗢   𝗗 𝗢 𝗖",
+                    title: "" ,
+                    description: `${v.title} | ${v.timestamp}\n`, 
+                    id: `${usedPrefix}ytmp3doc ${v.url}`
+                }, 
+                {
+                    header: "𝗩 𝗜 𝗗 𝗘 𝗢   𝗗 𝗢 𝗖",
+                    title: "" ,
+                    description: `${v.title} | ${v.timestamp}\n`, 
+                    id: `${usedPrefix}ytmp4doc ${v.url}`
+                }
+            ]
+        });
     }
-}
-
-module.exports = { handler: ytmp3alt, command: ['ytmp3alt'] };
-
-let handler = async (m, { conn, usedPrefix, text, args, command }) => {
-    if (!text) return m.reply("🔹 Debes proporcionar una URL de YouTube.");
-    if (!text.includes("youtube.com") && !text.includes("youtu.be")) return m.reply("❌ URL no válida.");
-
-    m.reply("⌛ Descargando video, por favor espera...");
-    
-    try {
-        let response = await fetch(`https://api.siputzx.my.id/api/d/ytmp4?url=${text}`);
-        let data = await response.json();
-
-        if (data.status && data.data.dl) {
-            let videoUrl = data.data.dl;
-            conn.sendMessage(m.chat, { video: { url: videoUrl }, mimetype: 'video/mp4' }, { quoted: m });
-        } else {
-            m.reply("❌ No se pudo descargar el video.");
-        }
-    } catch (err) {
-        console.error("Error en ytmp4alt:", err);
-        m.reply("❌ Ocurrió un error al procesar tu solicitud.");
-    }
-}
-
-module.exports = { handler: ytmp4alt, command: ['ytmp4alt'] };
-
-export default handler;
+await conn.sendList(m.chat, `${htki} *𝙍𝙀𝙎𝙐𝙇𝙏𝘼𝘿𝙊𝙎* ${htka}\n`, `\n𝘽𝙪𝙨𝙦𝙪𝙚𝙙𝙖 𝙙𝙚: ${text}`, `𝗕 𝗨 𝗦 𝗖 𝗔 𝗥`, listSections, fkontak);
+} catch (e) {
+await conn.sendButton(m.chat, `\n${wm}`, lenguajeGB['smsMalError3']() + '#report ' + usedPrefix + command, null, [[lenguajeGB.smsMensError1(), `#reporte ${lenguajeGB['smsMensError2']()} *${usedPrefix + command}*`]], null, null, m)
+console.log(e) 
+}}
+handler.help = ['playlist']
+handler.tags = ['dl']
+handler.command = /^playlist|ytbuscar|yts(earch)?$/i
+handler.limit = 1
+handler.level = 3
+export default handler
