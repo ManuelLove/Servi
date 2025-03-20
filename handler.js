@@ -1632,12 +1632,14 @@ if (m.text.startsWith('.ytmp3')) {
     } else {
         this.reply(m.chat, "⌛ Cargando...
 ▰▰▰▰▰▰▰▰▱", m);
-        let result = await ytmp3_siputzx(text);
-        if (result.success) {
-            this.sendMessage(m.chat, { audio: { url: result.url }, mimetype: 'audio/mpeg' }, { quoted: m });
-        } else {
-            this.reply(m.chat, result.error, m);
-        }
+        (async () => {
+            let result = await ytmp3_siputzx(text);
+            if (result.success) {
+                this.sendMessage(m.chat, { audio: { url: result.url }, mimetype: 'audio/mpeg' }, { quoted: m });
+            } else {
+                this.reply(m.chat, result.error, m);
+            }
+        })();
     }
 }
 
@@ -1651,11 +1653,13 @@ if (m.text.startsWith('.ytmp4')) {
     } else {
         this.reply(m.chat, "⌛ Cargando...
 ▰▰▰▰▰▰▰▰▱", m);
-        let result = await ytmp4_siputzx(text);
-        if (result.success) {
-            this.sendMessage(m.chat, { video: { url: result.url }, mimetype: 'video/mp4' }, { quoted: m });
-        } else {
-            this.reply(m.chat, result.error, m);
-        }
+        (async () => {
+            let result = await ytmp4_siputzx(text);
+            if (result.success) {
+                this.sendMessage(m.chat, { video: { url: result.url }, mimetype: 'video/mp4' }, { quoted: m });
+            } else {
+                this.reply(m.chat, result.error, m);
+            }
+        })();
     }
 }
