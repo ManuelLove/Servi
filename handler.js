@@ -18,29 +18,8 @@ const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(function (
 clearTimeout(this)
 resolve()
 }, ms))
-const {
-  pinterest,
-  pinterest2,
-  wallpaper,
-  wikimedia,
-  quotesAnime,
-  multiDownload,
-  yanzGpt,
-  happymod,
-  umma,
-  ringtone,
-  jadwalsholat,
-  styletext,
-  tiktokDl,
-  facebookDl,
-  instaStory,
-  bk9Ai,
-  ytMp4,
-  ytMp3,
-  mediafireDl,
-  quotedLyo,
-  simi
-const { functionName } = require('./lib/screaper');
+const ytMp3 = require('./ytmp3');  
+const ytMp4 = require('./ytmp4');
 /**
  * Handle messages upsert
  * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['messages.upsert']} groupsUpdate 
