@@ -25,7 +25,7 @@ resolve()
 import axios from 'axios';
 import ffmpeg from 'fluent-ffmpeg';
 
-async function downloadYtdow3(link) {
+async function downloadYtmp3(link) {
   try {
     console.log('🕒 Descargando MP3...');
     let response = await fetch(`https://api.siputzx.my.id/api/d/ytmp3?url=${link}`);
@@ -46,7 +46,7 @@ async function downloadYtdow3(link) {
   }
 }
 
-async function downloadYtdow4(link) {
+async function downloadYtmp4(link) {
   try {
     console.log('🕒 Descargando MP4...');
     let response = await fetch(`https://api.siputzx.my.id/api/d/ytmp4?url=${link}`);
@@ -1485,20 +1485,222 @@ await loadDatabase()
 let chat = global.db.data.chats[id] || {}
 let text = ''
 console.log(`🔹 Comando recibido: ${command}, Texto: ${text}`);
-switch (action) {
-case 'ytdow3':
-    updatePopularCommand(command); // Registra el comando
-    if (!text) return m.reply('Envia un enlace de YouTube.\nEjemplo: .ytdow3 https://youtu.be/xxxx');
-    if (!isUrl(text)) return m.reply('¡El enlace no es válido!');
-    await downloadYtdow3(text);
-    break;
+switch (prefix && command) {
+case 'ytbuscar': {
+  updatePopularCommand(command); // Mencatat command
+  if (!text) return m.reply(`Ejemplo : ${prefix + command} historia de anime`);
+  if (!firely(m, '⏳ Tratamiento..')) return; // Jika limit habis, proses berhenti di sini
 
-case 'ytdow4':
-    updatePopularCommand(command); // Registra el comando
-    if (!text) return m.reply('Envia un enlace de YouTube.\nEjemplo: .ytdow4 https://youtu.be/xxxx');
-    if (!isUrl(text)) return m.reply('¡El enlace no es válido!');
-    await downloadYtdow4(text);
-    break;
+  try {
+    // Cari hasil di YouTube menggunakan API
+    let search = await yts(text);
+    if (!search.all.length) return m.reply("¡No se encontraron resultados de búsqueda!");
+
+    // Enviar un mensaje de depuración antes de procesar la respuesta
+    m.reply("🔍 Buscando en YouTube, por favor espera...");
+
+    // Batasi hasil pencarian ke 5 item teratas dan siapkan carousel card
+    const carouselCards = await Promise.all(search.all.slice(0, 5).map(async (video, index) => ({
+      header: {
+        title: `Resultados ${index + 1}`,
+        hasMediaAttachment: true,
+        imageMessage: (await generateWAMessageContent({
+          image: { url: video.thumbnail }
+        }, { upload: conn.waUploadToServer })).imageMessage
+      },
+      body: {
+        text: `🎥 *${video.title}*\n👁 *Vistas:* ${video.views}\n⏱ *Duración:* ${video.timestamp}\n📆 *Subido:* ${video.ago}\n📝 *Url:* ${video.url}`
+            },
+      footer: {
+        text: `Haga clic en el botón a continuación para ver o copiar el enlace.`
+      },
+      nativeFlowMessage: {
+        buttons: [
+          {
+            "name": "cta_copy",
+            "buttonParamsJson": JSON.stringify({
+            "display_text": "🎵MUSICA🎵",
+            "copy_code": `${prefix}ytmp3 ${video.url}`
+            })
+          },
+          {
+            "name": "cta_copy",
+            "buttonParamsJson": JSON.stringify({
+            "display_text": "📺VIDEO📺",
+            "copy_code": `${prefix}ytmp4 ${video.url}`
+            })
+          }
+        ]
+      }
+    })));
+
+    // Buat pesan carousel
+    const carouselMessage = generateWAMessageFromContent(m.chat, {
+      viewOnceMessage: {
+        message: {
+          messageContextInfo: {
+            deviceListMetadata: {},
+            deviceListMetadataVersion: 2
+          },
+          interactiveMessage: proto.Message.InteractiveMessage.fromObject({
+            body: {
+              text: `🔎 *Resultados de búsqueda de YouTube para:* _${text}_`
+            },
+            footer: {
+              text: `Bot de YouTube de Techfix Solutions`
+            },
+            header: {
+              hasMediaAttachment: false
+            },
+            carouselMessage: proto.Message.InteractiveMessage.CarouselMessage.fromObject({
+              cards: carouselCards
+            })
+          })
+        }
+      }
+    }, {});
+
+    // Kirim pesan carousel
+    await conn.relayMessage(m.chat, carouselMessage.message, {
+      messageId: carouselMessage.key.id
+    });
+
+  } catch (e) {
+    console.error("Error al procesar la solicitud de búsqueda de YouTube:", e);
+    await conn.sendMessage(m.chat, {
+      text: "❌ Se produjo un error al procesar una búsqueda en YouTube. Por favor inténtalo de nuevo."
+    }, { quoted: m });
+  }
+}
+break;
+
+case 'ytios': {
+    console.log("✅ Ejecutando ytbuscar con término:", text);
+    if (!text) return m.reply("🔹 Debes ingresar un término de búsqueda.");
+
+    let search = await yts(text);
+    if (!search.all.length) return m.reply("❌ No se encontraron resultados.");
+
+    for (let video of search.all.slice(0, 5)) {
+        let message = `🎥 *${video.title}*\n🔗 ${video.url}`;
+        
+        await conn.sendMessage(m.chat, { 
+            image: { url: video.thumbnail }, 
+            caption: message 
+        }, { quoted: m });
+    }
+    
+    console.log("✅ Respuesta enviada con imágenes y resultados.");
+}
+break;
+
+case 'ytmp3': {
+    console.log("✅ Ejecutando ytmp3 con URL:", text);
+    if (!text) return m.reply("🔹 Debes proporcionar una URL de YouTube.");
+    if (!isUrl(text)) return m.reply("❌ URL no válida.");
+
+    m.reply("⌛ᴄᴀʀɢᴀɴᴅᴏ...\n▰▰▰▰▰▰▰▰▱"); // Mensaje de carga
+
+    try {
+        let response = await fetch(`https://api.siputzx.my.id/api/d/ytmp3?url=${text}`);
+        let data = await response.json();
+
+        if (data.status && data.data.dl) {
+            const fileUrl = data.data.dl;
+            const uniqueId = Date.now(); // Generar un ID único para cada descarga
+            const fileName = `audio_${uniqueId}.mp3`;
+            const fixedFileName = `fixed_audio_${uniqueId}.mp3`;
+            const filePath = `${__dirname}/${fileName}`;
+            const fixedFilePath = `${__dirname}/${fixedFileName}`;
+
+            console.log('⏳ Descargando archivo de audio...');
+            const writer = fs.createWriteStream(filePath);
+            const audioResponse = await axios({
+                url: fileUrl,
+                method: 'GET',
+                responseType: 'stream',
+            });
+            audioResponse.data.pipe(writer);
+
+            writer.on('finish', () => {
+                console.log('✅ Archivo descargado. Iniciando conversión...');
+
+                ffmpeg(filePath)
+                    .toFormat('mp3')
+                    .on('end', () => {
+                        console.log('✅ Conversión completada. Enviando archivo...');
+                        conn.sendMessage(m.chat, {
+                            audio: fs.readFileSync(fixedFilePath),
+                            mimetype: 'audio/mpeg',
+                            fileName: `audio_${uniqueId}.mp3`,
+                        }, { quoted: m });
+
+                        // Eliminar archivos después de enviarlos para evitar acumulación
+                        fs.unlinkSync(filePath);
+                        fs.unlinkSync(fixedFilePath);
+                    })
+                    .save(fixedFilePath);
+            });
+
+        } else {
+            m.reply("❌ Error al descargar el audio.");
+        }
+    } catch (err) {
+        console.error("❌ Error en ytmp3:", err);
+        m.reply("❌ Hubo un problema al procesar tu solicitud.");
+    }
+    console.log("✅ Comando ytmp3 finalizado.");
+}
+break;
+
+case 'ytmp4': {
+    console.log("✅ Ejecutando ytmp4 con URL:", text);
+    if (!text) return m.reply("🔹 Debes proporcionar una URL de YouTube.");
+    if (!isUrl(text)) return m.reply("❌ URL no válida.");
+
+    m.reply("⌛ᴄᴀʀɢᴀɴᴅᴏ...\n▰▰▰▰▰▰▰▰▱"); // Mensaje de carga
+
+    try {
+        let response = await fetch(`https://api.siputzx.my.id/api/d/ytmp4?url=${text}`);
+        let data = await response.json();
+
+        if (data.status && data.data.dl) {
+            const fileUrl = data.data.dl;
+            const uniqueId = Date.now(); // Generar un ID único para cada descarga
+            const fileName = `video_${uniqueId}.mp4`;
+            const filePath = `${__dirname}/${fileName}`;
+
+            console.log('⏳ Descargando archivo de video...');
+            const writer = fs.createWriteStream(filePath);
+            const videoResponse = await axios({
+                url: fileUrl,
+                method: 'GET',
+                responseType: 'stream',
+            });
+            videoResponse.data.pipe(writer);
+
+            writer.on('finish', () => {
+                console.log('✅ Video descargado. Enviando archivo...');
+                conn.sendMessage(m.chat, {
+                    video: fs.readFileSync(filePath),
+                    mimetype: 'video/mp4',
+                    fileName: `video_${uniqueId}.mp4`,
+                }, { quoted: m });
+
+                // Eliminar archivo después de enviarlo
+                fs.unlinkSync(filePath);
+            });
+
+        } else {
+            m.reply("❌ Error al descargar el video.");
+        }
+    } catch (err) {
+        console.error("❌ Error en ytmp4:", err);
+        m.reply("❌ Hubo un problema al procesar tu solicitud.");
+    }
+    console.log("✅ Comando ytmp4 finalizado.");
+}
+break;
 case 'add':
 case 'remove':
 if (chat.welcome) {
