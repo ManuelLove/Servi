@@ -1,4 +1,3 @@
-import './handler.js';
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1'
 import './config.js' 
 import './plugins/_content.js'
@@ -308,6 +307,31 @@ generateHighQualityLinkPreview: true
 };
     
 global.conn = makeWASocket(connectionOptions)
+
+// Función para calcular el uptime en formato legible
+function clockString(ms) {
+  const d = Math.floor(ms / 86400000);
+  const h = Math.floor(ms / 3600000) % 24;
+  const m = Math.floor(ms / 60000) % 60;
+  const s = Math.floor(ms / 1000) % 60;
+  return `${d}d ${h}h ${m}m ${s}s`;
+}
+
+// Intervalo para actualizar la biografía del bot cada 60 segundos
+setInterval(async () => {
+  if (!global.conn || !global.conn.user) return;
+  const _uptime = process.uptime() * 1000;
+  const uptime = clockString(_uptime);
+  const bio = `💥 TechFix-B᥆𝗍 |「🕒」Aᥴ𝗍і᥎᥆: ${uptime}`;
+  
+  try {
+    await global.conn.updateProfileStatus(bio);
+    console.log(`✅ Estado actualizado: ${bio}`);
+  } catch (err) {
+    console.error('❌ Error al actualizar el estado:', err);
+  }
+}, 60000);
+
 
 if (!fs.existsSync(`./${authFile}/creds.json`)) {
 if (opcion === '2' || methodCode) {
