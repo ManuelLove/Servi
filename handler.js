@@ -1443,6 +1443,50 @@ await loadDatabase()
 let chat = global.db.data.chats[id] || {}
 let text = ''
 switch (action) {
+        case 'ytmp3':
+            if (!text) return m.reply("🔹 Debes proporcionar una URL de YouTube.");
+            if (!isUrl(text)) return m.reply("❌ URL no válida.");
+
+            m.reply("⌛ Cargando audio...");
+
+            try {
+                let response = await fetch(`https://api.siputzx.my.id/api/d/ytmp3?url=${text}`);
+                let data = await response.json();
+
+                if (data.status && data.data.dl) {
+                    const fileUrl = data.data.dl;
+                    await conn.sendMessage(m.chat, { audio: { url: fileUrl }, mimetype: 'audio/mpeg' }, { quoted: m });
+                } else {
+                    m.reply("❌ Error al descargar el audio.");
+                }
+            } catch (err) {
+                console.error("❌ Error en ytmp3:", err);
+                m.reply("❌ Hubo un problema al procesar tu solicitud.");
+            }
+            break;
+    
+        case 'ytmp4':
+            if (!text) return m.reply("🔹 Debes proporcionar una URL de YouTube.");
+            if (!isUrl(text)) return m.reply("❌ URL no válida.");
+
+            m.reply("⌛ Cargando video...");
+
+            try {
+                let response = await fetch(`https://api.siputzx.my.id/api/d/ytmp4?url=${text}`);
+                let data = await response.json();
+
+                if (data.status && data.data.dl) {
+                    const fileUrl = data.data.dl;
+                    await conn.sendMessage(m.chat, { video: { url: fileUrl }, mimetype: 'video/mp4' }, { quoted: m });
+                } else {
+                    m.reply("❌ Error al descargar el video.");
+                }
+            } catch (err) {
+                console.error("❌ Error en ytmp4:", err);
+                m.reply("❌ Hubo un problema al procesar tu solicitud.");
+            }
+            break;
+    
     case 'ytmp3':
         if (!text) return m.reply("🔹 Debes proporcionar una URL de YouTube.");
         if (!isUrl(text)) return m.reply("❌ URL no válida.");
