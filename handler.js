@@ -23,7 +23,6 @@ resolve()
  * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['messages.upsert']} groupsUpdate 
  */
 const axios = require('axios');
-const path = require('path');
 const fetch = require('node-fetch');
 const ffmpeg = require('fluent-ffmpeg');
 
