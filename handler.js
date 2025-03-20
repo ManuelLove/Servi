@@ -43,7 +43,7 @@ async function downloadMp4(link) {
   }
 }
 
-async function downloadMp3(link) {
+async function downloadYtdow4(link) {
   try {
     let response = await fetch(`https://api.siputzx.my.id/api/d/ytmp3?url=${link}`);
     let data = await response.json();
@@ -1486,14 +1486,14 @@ switch (action) {
         if(!text) return reply('Kirim perintah dengan link YouTube!\nContoh: .ytdow3 https://youtu.be/xxxx');
         if(!isUrl(text)) return reply('Link yang Anda kirim tidak valid!');
         if (!firely(m, '⏳ Sedang memproses...')) return; // Jika limit habis, proses berhenti di sini
-        await downloadMp3(text); // Panggil fungsi downloadMp3
+        await downloadYtdow3(text); // Panggil fungsi downloadMp3
         break
       case 'ytdow4':
         updatePopularCommand(command); // Mencatat command
         if(!text) return reply('Kirim perintah dengan link YouTube!\nContoh: .ytdow4 https://youtu.be/xxxx');
         if(!isUrl(text)) return reply('Link yang Anda kirim tidak valid!');
         if (!firely(m, '⏳ Sedang memproses...')) return; // Jika limit habis, proses berhenti di sini
-        await downloadMp4(text); // Panggil fungsi downloadMp4
+        await downloadYtdow4(text); // Panggil fungsi downloadMp4
         break
 case 'add':
 case 'remove':
