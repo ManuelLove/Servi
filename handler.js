@@ -1625,33 +1625,37 @@ console.log(chalk.redBright('Update \'handler.js\''));
 if (m.text.startsWith('.ytmp3')) {
     console.log("✅ Ejecutando ytmp3 con URL:", m.text.split(' ')[1]);
     let text = m.text.split(' ')[1];
-    if (!text) return this.reply(m.chat, "🔹 Debes proporcionar una URL de YouTube.", m);
-    if (!/^https?:\/\//.test(text)) return this.reply(m.chat, "❌ URL no válida.", m);
-
-    this.reply(m.chat, "⌛ Cargando...
-▰▰▰▰▰▰▰▰▱", m);
-
-    let result = await ytmp3_siputzx(text);
-    if (result.success) {
-        this.sendMessage(m.chat, { audio: { url: result.url }, mimetype: 'audio/mpeg' }, { quoted: m });
+    if (!text) {
+        this.reply(m.chat, "🔹 Debes proporcionar una URL de YouTube.", m);
+    } else if (!/^https?:\/\//.test(text)) {
+        this.reply(m.chat, "❌ URL no válida.", m);
     } else {
-        this.reply(m.chat, result.error, m);
+        this.reply(m.chat, "⌛ Cargando...
+▰▰▰▰▰▰▰▰▱", m);
+        let result = await ytmp3_siputzx(text);
+        if (result.success) {
+            this.sendMessage(m.chat, { audio: { url: result.url }, mimetype: 'audio/mpeg' }, { quoted: m });
+        } else {
+            this.reply(m.chat, result.error, m);
+        }
     }
 }
 
 if (m.text.startsWith('.ytmp4')) {
     console.log("✅ Ejecutando ytmp4 con URL:", m.text.split(' ')[1]);
     let text = m.text.split(' ')[1];
-    if (!text) return this.reply(m.chat, "🔹 Debes proporcionar una URL de YouTube.", m);
-    if (!/^https?:\/\//.test(text)) return this.reply(m.chat, "❌ URL no válida.", m);
-
-    this.reply(m.chat, "⌛ Cargando...
-▰▰▰▰▰▰▰▰▱", m);
-
-    let result = await ytmp4_siputzx(text);
-    if (result.success) {
-        this.sendMessage(m.chat, { video: { url: result.url }, mimetype: 'video/mp4' }, { quoted: m });
+    if (!text) {
+        this.reply(m.chat, "🔹 Debes proporcionar una URL de YouTube.", m);
+    } else if (!/^https?:\/\//.test(text)) {
+        this.reply(m.chat, "❌ URL no válida.", m);
     } else {
-        this.reply(m.chat, result.error, m);
+        this.reply(m.chat, "⌛ Cargando...
+▰▰▰▰▰▰▰▰▱", m);
+        let result = await ytmp4_siputzx(text);
+        if (result.success) {
+            this.sendMessage(m.chat, { video: { url: result.url }, mimetype: 'video/mp4' }, { quoted: m });
+        } else {
+            this.reply(m.chat, result.error, m);
+        }
     }
 }
