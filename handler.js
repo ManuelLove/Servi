@@ -40,8 +40,7 @@ const {
   mediafireDl,
   quotedLyo,
   simi
-} = require('./lib/screaper')
-};
+} = require('./lib/screaper');
 /**
  * Handle messages upsert
  * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['messages.upsert']} groupsUpdate 
