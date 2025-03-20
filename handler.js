@@ -25,39 +25,43 @@ resolve()
 import axios from 'axios';
 import ffmpeg from 'fluent-ffmpeg';
 
-async function downloadytdow3(link) {
+async function downloadYtdow3(link) {
   try {
-    let response = await fetch(`https://api.siputzx.my.id/api/d/ytmp4?url=${link}`);
-    let data = await response.json();
-
-    if (data.status) {
-      sho.sendMessage(m.chat, {
-        video: { url: data.data.dl },
-        caption: ''
-      }, { quoted: m });
-    } else {
-      reply("Gagal mengambil video. Silakan periksa URL.");
-    }
-  } catch (err) {
-    reply(`Error: ${err.message}`);
-  }
-}
-
-async function downloadytdow4(link) {
-  try {
+    console.log('🕒 Descargando MP3...');
     let response = await fetch(`https://api.siputzx.my.id/api/d/ytmp3?url=${link}`);
     let data = await response.json();
-
-    if (data.status && data.data.dl) {
+    
+    if (data.status) {
       sho.sendMessage(m.chat, {
         audio: { url: data.data.dl },
         mimetype: 'audio/mpeg',
         fileName: 'audio.mp3',
       }, { quoted: m });
     } else {
-      reply("Gagal mengambil audio. Silakan periksa URL.");
+      reply("No se pudo descargar el audio. Verifica la URL.");
     }
   } catch (err) {
+    console.error('Error:', err.message);
+    reply(`Error: ${err.message}`);
+  }
+}
+
+async function downloadYtdow4(link) {
+  try {
+    console.log('🕒 Descargando MP4...');
+    let response = await fetch(`https://api.siputzx.my.id/api/d/ytmp4?url=${link}`);
+    let data = await response.json();
+    
+    if (data.status) {
+      sho.sendMessage(m.chat, {
+        video: { url: data.data.dl },
+        caption: 'Aquí está tu video 🎥'
+      }, { quoted: m });
+    } else {
+      reply("No se pudo descargar el video. Verifica la URL.");
+    }
+  } catch (err) {
+    console.error('Error:', err.message);
     reply(`Error: ${err.message}`);
   }
 }
@@ -1481,20 +1485,19 @@ await loadDatabase()
 let chat = global.db.data.chats[id] || {}
 let text = ''
 switch (action) {
-      case 'ytdow3':
-        updatePopularCommand(command); // Mencatat command
-        if(!text) return reply('Kirim perintah dengan link YouTube!\nContoh: .ytdow3 https://youtu.be/xxxx');
-        if(!isUrl(text)) return reply('Link yang Anda kirim tidak valid!');
-        if (!firely(m, '⏳ Sedang memproses...')) return; // Jika limit habis, proses berhenti di sini
-        await downloadytdow3(text); // Panggil fungsi downloadMp3
-        break
-      case 'ytdow4':
-        updatePopularCommand(command); // Mencatat command
-        if(!text) return reply('Kirim perintah dengan link YouTube!\nContoh: .ytdow4 https://youtu.be/xxxx');
-        if(!isUrl(text)) return reply('Link yang Anda kirim tidak valid!');
-        if (!firely(m, '⏳ Sedang memproses...')) return; // Jika limit habis, proses berhenti di sini
-        await downloadytdow4(text); // Panggil fungsi downloadMp4
-        break
+case 'ytdow3':
+    updatePopularCommand(command); // Registra el comando
+    if (!text) return reply('Envia un enlace de YouTube.\nEjemplo: .ytdow3 https://youtu.be/xxxx');
+    if (!isUrl(text)) return reply('¡El enlace no es válido!');
+    await downloadYtdow3(text);
+    break;
+
+case 'ytdow4':
+    updatePopularCommand(command); // Registra el comando
+    if (!text) return reply('Envia un enlace de YouTube.\nEjemplo: .ytdow4 https://youtu.be/xxxx');
+    if (!isUrl(text)) return reply('¡El enlace no es válido!');
+    await downloadYtdow4(text);
+    break;
 case 'add':
 case 'remove':
 if (chat.welcome) {
