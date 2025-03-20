@@ -62,4 +62,4 @@ async function ytmp3(m, { text }) {
     console.log("✅ Comando ytmp3 finalizado.");
 }
 
-module.exports = { handler: ytmp3alt, command: ['ytmp3'] };
+module.exports = { handler: ytmp3, command: ['ytmp3'] };

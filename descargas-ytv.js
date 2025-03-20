@@ -52,4 +52,4 @@ async function ytmp4(m, { text }) {
     console.log("✅ Comando ytmp4 finalizado.");
 }
 
-module.exports = { handler: ytmp4alt, command: ['ytmp4'] };
+module.exports = { handler: ytmp4, command: ['ytmp4'] };
