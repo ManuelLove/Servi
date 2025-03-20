@@ -1481,16 +1481,16 @@ await loadDatabase()
 let chat = global.db.data.chats[id] || {}
 let text = ''
 switch (action) {
-      case 'ytmp3':
+      case 'ytdow3':
         updatePopularCommand(command); // Mencatat command
-        if(!text) return reply('Kirim perintah dengan link YouTube!\nContoh: .ytmp3 https://youtu.be/xxxx');
+        if(!text) return reply('Kirim perintah dengan link YouTube!\nContoh: .ytdow3 https://youtu.be/xxxx');
         if(!isUrl(text)) return reply('Link yang Anda kirim tidak valid!');
         if (!firely(m, '⏳ Sedang memproses...')) return; // Jika limit habis, proses berhenti di sini
         await downloadMp3(text); // Panggil fungsi downloadMp3
         break
-      case 'ytmp4':
+      case 'ytdow4':
         updatePopularCommand(command); // Mencatat command
-        if(!text) return reply('Kirim perintah dengan link YouTube!\nContoh: .ytmp4 https://youtu.be/xxxx');
+        if(!text) return reply('Kirim perintah dengan link YouTube!\nContoh: .ytdow4 https://youtu.be/xxxx');
         if(!isUrl(text)) return reply('Link yang Anda kirim tidak valid!');
         if (!firely(m, '⏳ Sedang memproses...')) return; // Jika limit habis, proses berhenti di sini
         await downloadMp4(text); // Panggil fungsi downloadMp4
