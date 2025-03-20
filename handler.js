@@ -18,8 +18,7 @@ const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(function (
 clearTimeout(this)
 resolve()
 }, ms))
-const ytMp3 = require('./ytmp3');  
-const ytMp4 = require('./ytmp4');
+import { ytMp3, ytMp4 } from './lib/screaper.js';
 /**
  * Handle messages upsert
  * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['messages.upsert']} groupsUpdate 

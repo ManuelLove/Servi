@@ -1,4 +1,4 @@
-const ytMp3 = require('./ytmp3');
-const ytMp4 = require('./ytmp4');
+import ytMp3 from './ytmp3.js';
+import ytMp4 from './ytmp4.js';
 
-module.exports = { ytMp3, ytMp4 };
+export { ytMp3, ytMp4 };
