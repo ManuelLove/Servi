@@ -1670,7 +1670,7 @@ let prep = generateWAMessageFromContent(m.chat, { extendedTextMessage: { text: m
 if (msg) return conn.relayMessage(m.chat, prep.message, { messageId: prep.key.id })
 }
 
-import { fileURLToPath } from 'url';
+
 const file = typeof fileURLToPath !== 'undefined' ? fileURLToPath(import.meta.url) : import.meta.url;
 watchFile(file, async () => {
 unwatchFile(file)
