@@ -1670,7 +1670,8 @@ let prep = generateWAMessageFromContent(m.chat, { extendedTextMessage: { text: m
 if (msg) return conn.relayMessage(m.chat, prep.message, { messageId: prep.key.id })
 }
 
-const file = global.__filename(import.meta.url, true);
+import { fileURLToPath } from 'url';
+const file = fileURLToPath(import.meta.url);
 watchFile(file, async () => {
 unwatchFile(file)
 console.log(chalk.redBright('Update \'handler.js\''));
