@@ -8,7 +8,9 @@ import fs from 'fs'
 import chalk from 'chalk'   
 import fetch from 'node-fetch'
 import './plugins/_content.js'
- 
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const fs = require('fs'); 
 /**
  * @type {import('@adiwajshing/baileys')}  
  */
