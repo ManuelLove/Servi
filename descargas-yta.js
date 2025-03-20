@@ -1,25 +1,65 @@
+
+import fetch from 'node-fetch';
+import fs from 'fs';
+import axios from 'axios';
+import ffmpeg from 'fluent-ffmpeg';
+
 const fetch = require('node-fetch');
 
 async function ytmp3(m, { text }) {
+    console.log("✅ Ejecutando ytmp3 con URL:", text);
     if (!text) return m.reply("🔹 Debes proporcionar una URL de YouTube.");
-    if (!text.includes("youtube.com") && !text.includes("youtu.be")) return m.reply("❌ URL no válida.");
+    if (!isUrl(text)) return m.reply("❌ URL no válida.");
 
-    m.reply("⌛ Descargando audio, por favor espera...");
-    
+    m.reply("⌛ Cargando audio...");
+
     try {
         let response = await fetch(`https://api.siputzx.my.id/api/d/ytmp3?url=${text}`);
         let data = await response.json();
 
         if (data.status && data.data.dl) {
-            let audioUrl = data.data.dl;
-            conn.sendMessage(m.chat, { audio: { url: audioUrl }, mimetype: 'audio/mpeg' }, { quoted: m });
+            const fileUrl = data.data.dl;
+            const uniqueId = Date.now(); 
+            const fileName = `audio_${uniqueId}.mp3`;
+            const fixedFileName = `fixed_audio_${uniqueId}.mp3`;
+            const filePath = `${__dirname}/${fileName}`;
+            const fixedFilePath = `${__dirname}/${fixedFileName}`;
+
+            console.log('⏳ Descargando archivo de audio...');
+            const writer = fs.createWriteStream(filePath);
+            const audioResponse = await axios({
+                url: fileUrl,
+                method: 'GET',
+                responseType: 'stream',
+            });
+            audioResponse.data.pipe(writer);
+
+            writer.on('finish', () => {
+                console.log('✅ Archivo descargado. Iniciando conversión...');
+                ffmpeg(filePath)
+                    .toFormat('mp3')
+                    .on('end', () => {
+                        console.log('✅ Conversión completada. Enviando archivo...');
+                        conn.sendMessage(m.chat, {
+                            audio: fs.readFileSync(fixedFilePath),
+                            mimetype: 'audio/mpeg',
+                            fileName: `audio_${uniqueId}.mp3`,
+                        }, { quoted: m });
+
+                        fs.unlinkSync(filePath);
+                        fs.unlinkSync(fixedFilePath);
+                    })
+                    .save(fixedFilePath);
+            });
+
         } else {
-            m.reply("❌ No se pudo descargar el audio.");
+            m.reply("❌ Error al descargar el audio.");
         }
     } catch (err) {
-        console.error("Error en ytmp3:", err);
-        m.reply("❌ Ocurrió un error al procesar tu solicitud.");
+        console.error("❌ Error en ytmp3:", err);
+        m.reply("❌ Hubo un problema al procesar tu solicitud.");
     }
+    console.log("✅ Comando ytmp3 finalizado.");
 }
 
 module.exports = { handler: ytmp3, command: ['ytmp3'] };
