@@ -1622,44 +1622,46 @@ console.log(chalk.redBright('Update \'handler.js\''));
 })
 
 
-if (m.text.startsWith('.ytmp3')) {
-    console.log("✅ Ejecutando ytmp3 con URL:", m.text.split(' ')[1]);
-    let text = m.text.split(' ')[1];
+async function handleYtmp3(m, text) {
+    console.log("✅ Ejecutando ytmp3 con URL:", text);
     if (!text) {
-        this.reply(m.chat, "🔹 Debes proporcionar una URL de YouTube.", m);
-    } else if (!/^https?:\/\//.test(text)) {
-        this.reply(m.chat, "❌ URL no válida.", m);
+        return m.reply("🔹 Debes proporcionar una URL de YouTube.");
+    } 
+    if (!/^https?:\/\//.test(text)) {
+        return m.reply("❌ URL no válida.");
+    } 
+    m.reply("⌛ Cargando...
+▰▰▰▰▰▰▰▰▱");
+    let result = await ytmp3_siputzx(text);
+    if (result.success) {
+        m.conn.sendMessage(m.chat, { audio: { url: result.url }, mimetype: 'audio/mpeg' }, { quoted: m });
     } else {
-        this.reply(m.chat, "⌛ Cargando...
-▰▰▰▰▰▰▰▰▱", m);
-        (async () => {
-            let result = await ytmp3_siputzx(text);
-            if (result.success) {
-                this.sendMessage(m.chat, { audio: { url: result.url }, mimetype: 'audio/mpeg' }, { quoted: m });
-            } else {
-                this.reply(m.chat, result.error, m);
-            }
-        })();
+        m.reply(result.error);
     }
 }
 
-if (m.text.startsWith('.ytmp4')) {
-    console.log("✅ Ejecutando ytmp4 con URL:", m.text.split(' ')[1]);
-    let text = m.text.split(' ')[1];
+async function handleYtmp4(m, text) {
+    console.log("✅ Ejecutando ytmp4 con URL:", text);
     if (!text) {
-        this.reply(m.chat, "🔹 Debes proporcionar una URL de YouTube.", m);
-    } else if (!/^https?:\/\//.test(text)) {
-        this.reply(m.chat, "❌ URL no válida.", m);
+        return m.reply("🔹 Debes proporcionar una URL de YouTube.");
+    } 
+    if (!/^https?:\/\//.test(text)) {
+        return m.reply("❌ URL no válida.");
+    } 
+    m.reply("⌛ Cargando...
+▰▰▰▰▰▰▰▰▱");
+    let result = await ytmp4_siputzx(text);
+    if (result.success) {
+        m.conn.sendMessage(m.chat, { video: { url: result.url }, mimetype: 'video/mp4' }, { quoted: m });
     } else {
-        this.reply(m.chat, "⌛ Cargando...
-▰▰▰▰▰▰▰▰▱", m);
-        (async () => {
-            let result = await ytmp4_siputzx(text);
-            if (result.success) {
-                this.sendMessage(m.chat, { video: { url: result.url }, mimetype: 'video/mp4' }, { quoted: m });
-            } else {
-                this.reply(m.chat, result.error, m);
-            }
-        })();
+        m.reply(result.error);
     }
+}
+
+if (m.text.startsWith('.ytmp3')) {
+    handleYtmp3(m, m.text.split(' ')[1]);
+}
+
+if (m.text.startsWith('.ytmp4')) {
+    handleYtmp4(m, m.text.split(' ')[1]);
 }
