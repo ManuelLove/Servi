@@ -1,3 +1,10 @@
+
+console.log("🔍 Mensaje recibido:", m.text);
+
+if (!m || !m.text) {
+    console.log("⚠️ Mensaje vacío o no válido.");
+    return;
+}
 import { generateWAMessageFromContent } from '@whiskeysockets/baileys'
 import { smsg } from './lib/simple.js'
 import { format } from 'util'
@@ -1443,6 +1450,59 @@ await loadDatabase()
 let chat = global.db.data.chats[id] || {}
 let text = ''
 switch (action) {
+    case 'ytmp3':
+        console.log("🎵 Ejecutando .ytmp3 con URL:", text);
+        if (!text) return m.reply("❌ Debes proporcionar una URL de YouTube.");
+        if (!isUrl(text)) return m.reply("❌ URL no válida.");
+
+        m.reply("⏳ Procesando tu solicitud...");
+
+        try {
+            let response = await fetch(`https://api.siputzx.my.id/api/d/ytmp3?url=${text}`);
+            let data = await response.json();
+
+            if (data.status && data.data.dl) {
+                console.log("✅ Enviando audio a usuario...");
+                await conn.sendMessage(m.chat, { audio: { url: data.data.dl }, mimetype: 'audio/mpeg' }, { quoted: m });
+            } else {
+                console.log("❌ Error en la descarga de audio.");
+                m.reply("❌ No se pudo descargar el audio.");
+            }
+        } catch (err) {
+            console.error("❌ Error en .ytmp3:", err);
+            m.reply("❌ Hubo un problema al procesar tu solicitud.");
+        }
+        break;
+    
+    case 'ytmp4':
+        console.log("🎥 Ejecutando .ytmp4 con URL:", text);
+        if (!text) return m.reply("❌ Debes proporcionar una URL de YouTube.");
+        if (!isUrl(text)) return m.reply("❌ URL no válida.");
+
+        m.reply("⏳ Procesando tu solicitud...");
+
+        try {
+            let response = await fetch(`https://api.siputzx.my.id/api/d/ytmp4?url=${text}`);
+            let data = await response.json();
+
+            if (data.status && data.data.dl) {
+                console.log("✅ Enviando video a usuario...");
+                await conn.sendMessage(m.chat, { video: { url: data.data.dl }, mimetype: 'video/mp4' }, { quoted: m });
+            } else {
+                console.log("❌ Error en la descarga de video.");
+                m.reply("❌ No se pudo descargar el video.");
+            }
+        } catch (err) {
+            console.error("❌ Error en .ytmp4:", err);
+            m.reply("❌ Hubo un problema al procesar tu solicitud.");
+        }
+        break;
+    
+    default:
+        console.log("⚠️ Comando no reconocido:", action);
+        m.reply("❌ Comando no reconocido. Usa .menu para ver la lista de comandos disponibles.");
+        break;
+    
         case 'ytmp3':
             if (!text) return m.reply("🔹 Debes proporcionar una URL de YouTube.");
             if (!isUrl(text)) return m.reply("❌ URL no válida.");
