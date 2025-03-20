@@ -22,7 +22,6 @@ resolve()
  * Handle messages upsert
  * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['messages.upsert']} groupsUpdate 
  */
-const fs = require('fs');
 const axios = require('axios');
 const path = require('path');
 const fetch = require('node-fetch');
