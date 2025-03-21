@@ -5,34 +5,45 @@ if (!text) return conn.reply(m.chat, `${lenguajeGB['smsAvisoMG']()}𝙀𝙎𝘾�
 m.react('📀');
 let result = await yts(text);
 let ytres = result.videos;
-if (!ytres.length) return m.reply('❌ No se encontraron resultados.');
-
-if (m.isWABusiness) {
-let textoo = `${htki} 𝙍𝙀𝙎𝙐𝙇𝙏𝘼𝘿𝙊𝙎 ${htka}  ${text}\n\n`;
-for (let i = 0; i < Math.min(15, ytres.length); i++) { 
-let v = ytres[i];
-textoo += `❤️꙰༻ *TÍTULO:* ${v.title}\n⁖📆༻ *PUBLICADOS HACE:* ${v.ago}\n⁖👀༻ *VISTAS:* ${v.views}\n⁖⏰༻ *DURACIÓN:* ${v.timestamp}\n📎꙰༻ *LINK:* ${v.url}\n\n••••••••••••••••••••••••••••••••••••\n\n`;
+m.reply('Por favor, proporciona un término de búsqueda válido.');
+return;
 }
-await conn.sendFile(m.chat, ytres[0].image, 'thumbnail.jpg', textoo, m, null, fake);
-} else {
-let selectedResults = ytres.slice(0, 11);
-let messages = selectedResults.map(v => [
-``, 
-`❤️꙰༻ *TÍTULO:* ${v.title}\n⁖📆༻ *PUBLICADOS HACE:* ${v.ago}\n⁖👀༻ *VISTAS:* ${v.views}\n⁖⏰༻ *DURACIÓN:* ${v.timestamp}`, 
-v.image, 
-[],
-[["Copia para descargar", `.ytmp4 ${v.url}`]], 
-[], 
-[]]);
-
-await conn.sendCarousel(m.chat, `${htki} *𝙍𝙀𝙎𝙐𝙇𝙏𝘼𝘿𝙊𝙎* ${htka}\n`, htki + "YouTube Search" + htka, messages, m);
+const apiUrl = `https://eliasar-yt-api.vercel.app/api/oficial/youtube?query=${encodeURIComponent(text)}`;
+try {
+m.reply('⏳ Buscando videos en YouTube, por favor espera...');
+const res = await fetch(apiUrl);
+const json = await res.json();
+if (!json.status || !json.results.length) {
+m.reply('❌ No se encontraron resultados. Intenta con otro término de búsqueda.');
+return;
 }
-};
-handler.help = ['playlist']
-handler.tags = ['dl']
-handler.command = /^playlist|ytbuscar|yts(earch)?$/i
-handler.limit = 1
-handler.level = 3
+
+const videos = json.results.slice(0, 10);
+let message = '*🔍 Resultados de búsqueda:*\n\n';
+
+for (const video of videos) {
+const snippet = video.snippet;
+const stats = video.statistics || {};
+message += `🎥 *Título:* ${snippet.title}\n`;
+message += `📜 *Descripción:* ${snippet.description || 'No disponible'}\n`;
+message += `📺 *Canal:* ${snippet.channelTitle}\n`;
+message += `⏰ *Publicado:* ${new Date(snippet.publishedAt).toLocaleString()}\n`;
+message += `👁️ *Vistas:* ${stats.viewCount || 'N/A'}\n`;
+message += `👍 *Likes:* ${stats.likeCount || 'N/A'}\n`;
+message += `💬 *Comentarios:* ${stats.commentCount || 'N/A'}\n`;
+message += `🔗 *Link:* https://www.youtube.com/watch?v=${video.id}\n\n`;
+}
+
+await conn.sendMessage(m.chat, {
+image: { url: videos[0].snippet.thumbnails.high.url },
+caption: message.trim()
+}, { quoted: m });
+
+} catch (error) {
+console.error(error);
+m.reply('❌ Ocurrió un error al buscar los videos. Inténtalo de nuevo más tarde.');
+}
+break;
 export default handler
 
 /*
