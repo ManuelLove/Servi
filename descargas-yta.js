@@ -12,10 +12,17 @@ try {
     let apiUrl = `https://api.siputzx.my.id/api/d/ytmp3?url=${youtubeLink}`;
     let response = await fetch(apiUrl);
     let data = await response.json();
-    let audioUrl = data.result.url;
-    
-    await conn.sendFile(m.chat, audioUrl, data.result.title + '.mp3', null, m, false, { mimetype: 'audio/mp4' });
+
+    if (data.status && data.data.dl) {
+        let audioUrl = data.data.dl;
+        let titulo = data.data.title || 'audio';
+
+        await conn.sendFile(m.chat, audioUrl, titulo + '.mp3', null, m, false, { mimetype: 'audio/mpeg' });
+    } else {
+        await conn.reply(m.chat, '🚩 *Error al descargar el audio*', m);
+    }
 } catch (error) {
+    console.error("Error en la descarga de audio:", error);
     await conn.reply(m.chat, '🚩 *Ocurrió un fallo al descargar el audio*', m);
 }}
 
