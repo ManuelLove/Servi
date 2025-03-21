@@ -1,4 +1,6 @@
 import fetch from 'node-fetch'
+import fs from 'fs'
+import path from 'path'
 
 var handler = async (m, { text, conn, args, usedPrefix, command }) => {
 
@@ -18,14 +20,18 @@ try {
     if (data.status && data.data.dl) {
         let audioUrl = data.data.dl;
         let titulo = data.data.title || 'audio';
+        let filePath = path.join('/tmp', `${titulo}.mp3`);
 
-        // Verificar si el enlace de descarga es accesible
-        let testResponse = await fetch(audioUrl, { method: 'HEAD' });
-        if (!testResponse.ok) {
-            throw new Error("El enlace de descarga no es accesible.");
-        }
+        // Descargar el archivo antes de enviarlo
+        let audioResponse = await fetch(audioUrl);
+        let buffer = await audioResponse.arrayBuffer();
+        fs.writeFileSync(filePath, Buffer.from(buffer));
 
-        await conn.sendFile(m.chat, audioUrl, titulo + '.mp3', null, m, false, { mimetype: 'audio/mpeg' });
+        // Enviar el archivo descargado
+        await conn.sendFile(m.chat, filePath, `${titulo}.mp3`, null, m, false, { mimetype: 'audio/mpeg' });
+
+        // Eliminar el archivo después de enviarlo
+        fs.unlinkSync(filePath);
     } else {
         await conn.reply(m.chat, '🚩 *Error: No se encontró un enlace de descarga válido.*', m);
     }
