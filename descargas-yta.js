@@ -19,7 +19,7 @@ try {
 
     if (data.status && data.data.dl) {
         let audioUrl = data.data.dl;
-        let titulo = data.data.title || 'audio';
+        let titulo = data.data.title.replace(/[^a-zA-Z0-9]/g, "_") || 'audio'; // Evitar caracteres especiales en el nombre
         let filePath = path.join('/tmp', `${titulo}.mp3`);
 
         console.log("Descargando desde:", audioUrl);
@@ -36,9 +36,13 @@ try {
         // Verificar si el archivo se guardó correctamente
         if (fs.existsSync(filePath)) {
             console.log("Archivo guardado en:", filePath);
+            console.log("Enviando archivo como audio...");
 
-            await conn.sendFile(m.chat, filePath, `${titulo}.mp3`, null, m, false, { mimetype: 'audio/mpeg' });
+            let audioBuffer = fs.readFileSync(filePath);
+            await conn.sendMessage(m.chat, { audio: audioBuffer, mimetype: 'audio/mpeg', fileName: `${titulo}.mp3`, ptt: false }, { quoted: m });
 
+            console.log("Archivo enviado con éxito.");
+            
             // Eliminar el archivo después de enviarlo
             fs.unlinkSync(filePath);
         } else {
