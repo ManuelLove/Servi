@@ -322,7 +322,7 @@ setInterval(async () => {
   if (!global.conn || !global.conn.user) return;
   const _uptime = process.uptime() * 1000;
   const uptime = clockString(_uptime);
-  const bio = `💥 TechFix-B᥆𝗍 |「🕒」Aᥴ𝗍і᥎᥆: ${uptime}`;
+  const bio = `🇨🇴 TechFix-B᥆𝗍 |「🕒」Aᥴ𝗍і᥎᥆: ${uptime}`;
   
   try {
     await global.conn.updateProfileStatus(bio);
