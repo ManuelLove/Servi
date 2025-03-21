@@ -4,7 +4,8 @@ import axios from "axios";
 const handler = async (m, { conn, text, usedPrefix, command }) => {
 if (!text) return conn.reply(m.chat, `🎌 *Ingrese el nombre de un video de YouTube*\n\nEjemplo, !${command} New West - Those Eyes`,  m, fake)
 try {
-m.react(rwait)
+const rwait = '⏳'; // Definir el emoji antes de usarlo
+m.react(rwait);
 const search = await yts(text);
 if (!search.all || search.all.length === 0) {
 return m.reply('No se encontraron resultados para tu búsqueda.');
