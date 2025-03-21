@@ -22,7 +22,7 @@ let handler = async (m, { conn, usedPrefix, text, args, command }) => {
       },
       body: {
         text: `🎵 *Título:* ${video.title}
-📆 Publicado hace ${video.ago}
+📆 Publicado hace: ${video.ago}
 👀 Vistas: ${video.views}
 ⌛ Duración: ${video.timestamp}`
       },
