@@ -19,6 +19,12 @@ try {
         let audioUrl = data.data.dl;
         let titulo = data.data.title || 'audio';
 
+        // Verificar si el enlace de descarga es accesible
+        let testResponse = await fetch(audioUrl, { method: 'HEAD' });
+        if (!testResponse.ok) {
+            throw new Error("El enlace de descarga no es accesible.");
+        }
+
         await conn.sendFile(m.chat, audioUrl, titulo + '.mp3', null, m, false, { mimetype: 'audio/mpeg' });
     } else {
         await conn.reply(m.chat, '🚩 *Error: No se encontró un enlace de descarga válido.*', m);
