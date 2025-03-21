@@ -1,65 +1,96 @@
+import { generateWAMessageContent, generateWAMessageFromContent, proto } from '@whiskeysockets/baileys';
 import yts from 'yt-search';
 
 let handler = async (m, { conn, usedPrefix, text, args, command }) => {
-if (!text) return m.reply(`*¿Qué está buscando?* Ingrese el nombre del tema\n*• Ejemplo*\n*${usedPrefix + command}* bad bunny`);
-m.react('📀');
-let result = await yts(text);
-let ytres = result.videos;
-if (!ytres.length) return m.reply('❌ No se encontraron resultados.');
+  if (!text) return m.reply(`Ejemplo : ${usedPrefix + command} historia de anime`);
+    m.react('📀');  // Reacción añadida
 
-if (m.isWABusiness) {
-let textoo = `*• Resultados de:*  ${text}\n\n`;
-for (let i = 0; i < Math.min(15, ytres.length); i++) { 
-let v = ytres[i];
-textoo += `🎵 *Título:* ${v.title}\n📆 *Publicado hace:* ${v.ago}\n👀 *Vistas:* ${v.views}\n⌛ *Duración:* ${v.timestamp}\n🔗 *Enlace:* ${v.url}\n\n⊱ ────── {.⋅ ♫ ⋅.} ───── ⊰\n\n`;
-}
-await conn.sendFile(m.chat, ytres[0].image, 'thumbnail.jpg', textoo, m, null, fake);
-} else {
-let selectedResults = ytres.slice(0, 9);
-let messages = selectedResults.map(v => [
-``, 
-`🎵 *Título:* ${v.title}\n📆 Publicado hace: ${v.ago}\n👀 Vistas: ${v.views}\n⌛ Duración: ${v.timestamp}`, 
-v.image, 
-[],
-[["Copia para descargar", `.ytmp4 ${v.url}`]], 
-[], 
-[]]);
+  try {
+    let search = await yts(text);
+    if (!search.all.length) return m.reply("¡No se encontraron resultados de búsqueda!");
 
-await conn.sendCarousel(m.chat, `✅ Resultados para: ${text}`, "🎵 YouTube Search", messages, m);
-}
+    // Enviar mensaje de búsqueda
+    m.reply("🔍 Buscando en YouTube, por favor espera...");
+
+    const carouselCards = await Promise.all(search.all.slice(0, 5).map(async (video, index) => ({
+      header: {
+        title: `Resultados ${index + 1}`,
+        hasMediaAttachment: true,
+        imageMessage: (await generateWAMessageContent({
+          image: { url: video.thumbnail }
+        }, { upload: conn.waUploadToServer })).imageMessage
+      },
+      body: {
+        text: `🎵 *Título:* ${video.title}
+👀 Vistas: ${video.views}
+⌛ Duración: ${video.timestamp}
+📆 Publicado hace ${video.ago}`
+      },
+      footer: {
+        text: `Haga clic en el botón a continuación para ver o copiar el enlace.`
+      },
+      nativeFlowMessage: {
+        buttons: [
+          {
+            "name": "cta_copy",
+            "buttonParamsJson": JSON.stringify({
+              "display_text": "🎵MUSICA🎵",
+              "copy_code": `${usedPrefix}ytmp3 ${video.url}`
+            })
+          },
+          {
+            "name": "cta_copy",
+            "buttonParamsJson": JSON.stringify({
+              "display_text": "📺VIDEO📺",
+              "copy_code": `${usedPrefix}ytmp4 ${video.url}`
+            })
+          }
+        ]
+      }
+    })));
+
+    // Crear y enviar mensaje tipo carrusel
+    const carouselMessage = generateWAMessageFromContent(m.chat, {
+      viewOnceMessage: {
+        message: {
+          messageContextInfo: {
+            deviceListMetadata: {},
+            deviceListMetadataVersion: 2
+          },
+          interactiveMessage: proto.Message.InteractiveMessage.fromObject({
+            body: {
+              text: `🔎 *Resultados de búsqueda de YouTube para:* _${text}_`
+            },
+            footer: {
+              text: `Bot de YouTube`
+            },
+            header: {
+              hasMediaAttachment: false
+            },
+            carouselMessage: proto.Message.InteractiveMessage.CarouselMessage.fromObject({
+              cards: carouselCards
+            })
+          })
+        }
+      }
+    }, {});
+
+    await conn.relayMessage(m.chat, carouselMessage.message, {
+      messageId: carouselMessage.key.id
+    });
+
+  } catch (e) {
+    console.error("Error al procesar la búsqueda de YouTube:", e);
+    await conn.sendMessage(m.chat, {
+      text: "❌ Se produjo un error al realizar la búsqueda en YouTube. Inténtalo de nuevo."
+    }, { quoted: m });
+  }
 };
-handler.help = ['playlist', 'yts'];
-handler.tags = ['downloader'];
-handler.command = ['playvid2', 'playlist', 'playlista', 'yts', 'ytsearch'];
-handler.register = true;
+
+handler.help = ['ytbuscar'];
+handler.tags = ['buscadores'];
+handler.command = /^ytbuscar|playlist|yts(earch)?$/i;
+handler.limit = 1;
+handler.level = 3;
+
 export default handler;
-
-/*Codigo con la listas obsoleto
-import yts from 'yt-search';
-let handler = async (m, { conn, usedPrefix, text, args, command }) => {
-if (!text) return m.reply(`*Que esta buscado?* ingrese el nombre del tema\n*• Ejemplo*\n*${usedPrefix + command}* bad bunny `) 
-m.react('📀');
-    
-let result = await yts(text);
-let ytres = result.videos;
-let listSections = [];
-for (let index in ytres) {
-let v = ytres[index];
-listSections.push({title: `${index} | ${v.title}`,
-rows: [{header: '• • •「 🅐🅤🅓🅘🅞 」• • •', title: "", description: `▢ ⌚ Duración:* ${v.timestamp}\n▢ 👀 *Vistas:* ${v.views}\n▢ 📌 *Publicado* : ${v.title}\n▢ 📆 *Subidos:* ${v.ago}\n`, id: `${usedPrefix}fgmp3 ${v.url}`
-}, {
-header: "• • •「 🅥🅘🅓🅔🅞 」• • •", title: "" , description: `▢ ⌚ Duración:* ${v.timestamp}\n▢ 👀 *Vistas:* ${v.views}\n▢ 📌 *Publicado* : ${v.title}\n▢ 📆 *Subidos:* ${v.ago}\n`, id: `${usedPrefix}fgmp4 ${v.url}`
-}, {
-header: "• • •「 🅓🅞🅒🅤🅜🅔🅝🅣🅞🅢 🅜🅟❸ 」• • •", title: "" , description: `▢ ⌚ Duración:* ${v.timestamp}\n▢ 👀 *Vistas:* ${v.views}\n▢ 📌 *Publicado* : ${v.title}\n▢ 📆 *Subidos:* ${v.ago}\n`, id: `${usedPrefix}ytmp3doc ${v.url}` }, {
-header: "'• • •「 🅓🅞🅒🅤🅜🅔🅝🅣🅞🅢 🅜🅟❹ 」• • •", title: "" , description: `▢ ⌚ Duración:* ${v.timestamp}\n▢ 👀 *Vistas:* ${v.views}\n▢ 📌 *Publicado* : ${v.title}\n▢ 📆 *Subidos:* ${v.ago}\n`, id: `${usedPrefix}ytmp4doc ${v.url}`
-}]});}
-    
-await conn.sendList(m.chat, `*• Resultados:* ${text}*\n\n> *ᴇʟɪᴊᴀ ᴀ ᴜɴᴀ ᴏᴘᴄɪᴏɴ ʏ ᴘʀᴇsɪᴏɴᴇ ᴇɴᴠɪᴀʀ*`, wm, `🚀 𝙍𝙀𝙎𝙐𝙇𝙏𝘼𝘿𝙊𝙎 🚀`, ytres[0].image, listSections, m);
-};
-handler.help = ['playlist', 'yts']
-handler.tags = ['downloader']
-handler.command = ['playvid2', 'playlist', 'playlista', 'yts', 'ytsearch'] 
-handler.register = true 
-
-export default handler
-*/
