@@ -1,6 +1,7 @@
 import fetch from 'node-fetch'
 import fs from 'fs'
 import path from 'path'
+import { exec } from 'child_process'
 
 var handler = async (m, { text, conn, args, usedPrefix, command }) => {
 
@@ -21,6 +22,7 @@ try {
         let audioUrl = data.data.dl;
         let titulo = data.data.title.replace(/[^a-zA-Z0-9]/g, "_") || 'audio'; // Evitar caracteres especiales en el nombre
         let filePath = path.join('/tmp', `${titulo}.mp3`);
+        let convertedFilePath = path.join('/tmp', `fixed_${titulo}.mp3`);
 
         console.log("Descargando desde:", audioUrl);
 
@@ -36,15 +38,26 @@ try {
         // Verificar si el archivo se guardó correctamente
         if (fs.existsSync(filePath)) {
             console.log("Archivo guardado en:", filePath);
-            console.log("Enviando archivo como audio...");
+            console.log("Convirtiendo audio para compatibilidad...");
 
-            let audioBuffer = fs.readFileSync(filePath);
-            await conn.sendMessage(m.chat, { audio: audioBuffer, mimetype: 'audio/mpeg', fileName: `${titulo}.mp3`, ptt: false }, { quoted: m });
+            // Convertir el archivo con ffmpeg
+            exec(`ffmpeg -i "${filePath}" -acodec libmp3lame -q:a 4 "${convertedFilePath}"`, async (error, stdout, stderr) => {
+                if (error) {
+                    console.error("Error en la conversión con ffmpeg:", error);
+                    return conn.reply(m.chat, "🚩 Error al convertir el audio.", m);
+                }
 
-            console.log("Archivo enviado con éxito.");
-            
-            // Eliminar el archivo después de enviarlo
-            fs.unlinkSync(filePath);
+                console.log("Conversión completada. Enviando archivo...");
+
+                let audioBuffer = fs.readFileSync(convertedFilePath);
+                await conn.sendMessage(m.chat, { audio: audioBuffer, mimetype: 'audio/mpeg', fileName: `${titulo}.mp3` }, { quoted: m });
+
+                console.log("Archivo enviado con éxito.");
+
+                // Eliminar los archivos después de enviarlos
+                fs.unlinkSync(filePath);
+                fs.unlinkSync(convertedFilePath);
+            });
         } else {
             console.error("Error: El archivo no se guardó correctamente.");
             await conn.reply(m.chat, "🚩 Error: No se pudo guardar el archivo en el servidor.", m);
