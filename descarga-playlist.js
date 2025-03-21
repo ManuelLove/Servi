@@ -21,10 +21,7 @@ let messages = selectedResults.map(v => [
 `🎵 *Título:* ${v.title}\n📆 Publicado hace: ${v.ago}\n👀 Vistas: ${v.views}\n⌛ Duración: ${v.timestamp}`, 
 v.image, 
 [],
-[["Descargar Musica", `.ytmp3 ${v.url}`]], 
-[], 
-[],
-[["Descargar Video", `.ytmp4 ${v.url}`]], 
+[["Copia para descargar", `.ytmp4 ${v.url}`]], 
 [], 
 []]);
 
@@ -33,7 +30,7 @@ await conn.sendCarousel(m.chat, `✅ Resultados para: ${text}`, "🎵 YouTube Se
 };
 handler.help = ['playlist', 'yts'];
 handler.tags = ['downloader'];
-handler.command = ['ytbuscar', 'playlist', 'playlista', 'yts', 'ytsearch'];
+handler.command = ['playvid2', 'playlist', 'playlista', 'yts', 'ytsearch'];
 handler.register = true;
 export default handler;
 
