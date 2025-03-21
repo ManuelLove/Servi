@@ -90,8 +90,7 @@ let handler = async (m, { conn, usedPrefix, text, args, command }) => {
 handler.help = ['ytbuscar'];
 handler.tags = ['buscadores'];
 handler.command = /^ytbuscar|playlist|yts(earch)?$/i;
+handler.register = true;
 handler.limit = 1;
 handler.level = 3;
-
-handler.register = true;
 export default handler;

@@ -73,8 +73,9 @@ return m.reply(`❌ Ocurrió un error: ${error.message}`);
 handler.help = ['play', 'play2'];
 handler.tags = ['descargas'];
 handler.command = /^play2?$/i;
-handler.register = true
-handler.limit = true
+handler.register = true;
+handler.limit = 1;
+handler.level = 3;
 export default handler;
 
 /*import fetch from 'node-fetch'

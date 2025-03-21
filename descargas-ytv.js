@@ -30,8 +30,7 @@ ${titulo}` }, { quoted: m });
 handler.help = ['ytv']
 handler.tags = ['descargas']
 handler.command = /^fgmp4|dlmp4|getvid|yt(v|mp4)?$/i
-
-handler.register = true
-handler.limit = true
-
+handler.register = true;
+handler.limit = 1;
+handler.level = 3;
 export default handler
