@@ -27,7 +27,7 @@ let handler = async (m, { conn, usedPrefix, text, args, command }) => {
 ⌛ Duración: ${video.timestamp}`
       },
       footer: {
-        text: `Haga clic en el botón a continuación para ver o copiar el enlace.`
+        text: `Haga clic en el botón a continuación para copiar el enlace.`
       },
       nativeFlowMessage: {
         buttons: [
