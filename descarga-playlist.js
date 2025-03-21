@@ -24,8 +24,7 @@ let handler = async (m, { conn, usedPrefix, text, args, command }) => {
         text: `🎥 *${video.title}*
 👁 *Vistas:* ${video.views}
 ⏱ *Duración:* ${video.timestamp}
-📆 *Subido:* ${video.ago}
-📝 *Url:* ${video.url}`
+📆 *Subido:* ${video.ago}`
       },
       footer: {
         text: `Haga clic en el botón a continuación para ver o copiar el enlace.`
