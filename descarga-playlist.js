@@ -20,7 +20,7 @@ let handler = async (m, { conn, usedPrefix, text, args, command }) => {
           image: { url: video.thumbnail }
         }, { upload: conn.waUploadToServer })).imageMessage
       },
-      footer: {
+      body: {
         text: `🎵 *Título:* ${video.title}
 📆 Publicado hace ${video.ago}
 👀 Vistas: ${video.views}
