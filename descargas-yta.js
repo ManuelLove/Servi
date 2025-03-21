@@ -22,16 +22,29 @@ try {
         let titulo = data.data.title || 'audio';
         let filePath = path.join('/tmp', `${titulo}.mp3`);
 
-        // Descargar el archivo antes de enviarlo
+        console.log("Descargando desde:", audioUrl);
+
         let audioResponse = await fetch(audioUrl);
+        if (!audioResponse.ok) {
+            console.error("Error al descargar el archivo, respuesta no válida:", audioResponse.status);
+            return conn.reply(m.chat, "🚩 Error al descargar el archivo.", m);
+        }
+
         let buffer = await audioResponse.arrayBuffer();
         fs.writeFileSync(filePath, Buffer.from(buffer));
 
-        // Enviar el archivo descargado
-        await conn.sendFile(m.chat, filePath, `${titulo}.mp3`, null, m, false, { mimetype: 'audio/mpeg' });
+        // Verificar si el archivo se guardó correctamente
+        if (fs.existsSync(filePath)) {
+            console.log("Archivo guardado en:", filePath);
 
-        // Eliminar el archivo después de enviarlo
-        fs.unlinkSync(filePath);
+            await conn.sendFile(m.chat, filePath, `${titulo}.mp3`, null, m, false, { mimetype: 'audio/mpeg' });
+
+            // Eliminar el archivo después de enviarlo
+            fs.unlinkSync(filePath);
+        } else {
+            console.error("Error: El archivo no se guardó correctamente.");
+            await conn.reply(m.chat, "🚩 Error: No se pudo guardar el archivo en el servidor.", m);
+        }
     } else {
         await conn.reply(m.chat, '🚩 *Error: No se encontró un enlace de descarga válido.*', m);
     }
