@@ -159,9 +159,6 @@ let menu = `⎔ \`\`\`${horarioFecha}\`\`\`
 ┃⛺ _${lenguajeGB['smsTex14']()}_ ⛺
 ┃➺ _${usedPrefix}makermenu_
 ┃
-┃💮 _${lenguajeGB['smsTex15']()}_ 💮
-┃➺ _${usedPrefix}menulogos2_
-┃
 ┃🌅 _${lenguajeGB['smsTex15']()}_ 🌅
 ┃➺ _${usedPrefix}menulogos2_
 ┃
@@ -266,9 +263,6 @@ let menu = `${lenguajeGB['smsConfi2']()} *${user.genero === 0 ? '👤' : user.ge
 ┃
 ┃⛺ _${lenguajeGB['smsTex14']()}_ ⛺
 ┃➺ _${usedPrefix}makermenu_
-┃
-┃💮 _${lenguajeGB['smsTex15']()}_ 💮
-┃➺ _${usedPrefix}menulogos2_
 ┃
 ┃🌅 _${lenguajeGB['smsTex15']()}_ 🌅
 ┃➺ _${usedPrefix}menulogos2_
