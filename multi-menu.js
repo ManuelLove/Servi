@@ -315,9 +315,8 @@ let menuA = `🪄 ${lenguajeGB['smsConfi2']()} *${username}*
 ∘ _${usedPrefix}imagen | image *texto*_
 ∘ _${usedPrefix}pinterest | dlpinterest *texto*_
 ∘ _${usedPrefix}wallpaper|wp *texto*_
-∘ _${usedPrefix}play | play2 *texto o link*_
-∘ _${usedPrefix}play.1 *texto o link*_
-∘ _${usedPrefix}play.2 *texto o link*_ 
+∘ _${usedPrefix}play | *video texto o link*_
+∘ _${usedPrefix}play2 | *music texto o link*_
 ∘ _${usedPrefix}ytmp3 | yta *link*_
 ∘ _${usedPrefix}ytmp4 | ytv *link*_
 ∘ _${usedPrefix}playdoc | play3 *texto o link*_
@@ -393,11 +392,14 @@ let menuA = `🎠 ${lenguajeGB['smsConfi2']()} *${username}*
 ∘ _${usedPrefix}acentijo_
 ∘ _${usedPrefix}cancion_
 ∘ _${usedPrefix}adivinaza_
-∘ _${usedPrefix}pelicula
+∘ _${usedPrefix}pelicula_
+∘ _${usedPrefix}ahorcado_
+∘ _${usedPrefix}acertijo_
+∘ _${usedPrefix}trivia_
+∘ _${usedPrefix}sopa_
 ∘ _${usedPrefix}dado_
 ∘ _${usedPrefix}verdad_
 ∘ _${usedPrefix}reto_
-∘ _${usedPrefix}multijuegos_
 ∘ _${usedPrefix}ruleta_
 ∘ _${usedPrefix}suerte_
 ∘ _${usedPrefix}ruletadelban_
