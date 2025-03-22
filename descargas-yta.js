@@ -54,7 +54,7 @@ try {
 
 handler.help = ['yta']
 handler.tags = ['descargas']
-handler.command = /^audio|fgmp3|dlmp3|getaud|yt(a|mp3)$/i
+handler.command = /^ytmp3|fgmp3|dlmp3|getaud|yt(a|mp3)$/i
 handler.register = true;
 handler.limit = 1;
 handler.level = 3;
