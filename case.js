@@ -21708,7 +21708,8 @@ case 'hdr':
         if (!hasil.status) throw new Error(hasil.msg);
 
         // DESCARGA LA IMAGEN MEJORADA COMO BUFFER
-        const bufferHD = await fetch(hasil.data.url).then(res => res.buffer());
+        const res = await axios.get(hasil.data.url, { responseType: 'arraybuffer' });
+const bufferHD = Buffer.from(res.data);
 
         await shoNherly('¡La calidad de la imagen se ha mejorado con éxito! ✅');
         await shoNhe.sendMessage(m.chat, {
