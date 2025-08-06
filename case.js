@@ -21678,29 +21678,43 @@ case 'hdr':
         return sendRegister(shoNhe, m, prefix, namabot);
     }
     updatePopularCommand(command);
-    const levelUpMessage = levelUpdate(command, m.sender); // Update level usuario
+    const levelUpMessage = levelUpdate(command, m.sender);
     shoNhe.enhancer = shoNhe.enhancer ? shoNhe.enhancer : {};
-    if (m.sender in shoNhe.enhancer) return shoNherly(`Todavía hay procesos que no se han completado, por favor espere hasta que se complete el proceso.`)
+    if (m.sender in shoNhe.enhancer)
+        return shoNherly(`Todavía hay procesos que no se han completado, por favor espere hasta que se complete el proceso.`);
     let query = m.quoted ? m.quoted : m;
     let mime = (query.msg || query).mimetype || query.mediaType || "";
-    if (!mime) return shoNherly(`Enviar/Responder a imágenes con título ${prefix + command}`)
-    if (!/image\/(jpe?g|png)/.test(mime)) return shoNherly(`¡Los medios no son compatibles!`)
+    if (!mime) return shoNherly(`Enviar/Responder a imágenes con título ${prefix + command}`);
+    if (!/image\/(jpe?g|png)/.test(mime)) return shoNherly(`¡Los medios no son compatibles!`);
     shoNhe.enhancer[m.sender] = true;
     try {
         if (!(await firely(m, mess.waits))) return;
         let media = await query.download();
-        const hasil = await remini(media); // <-- NUEVA función remini
+
+        // SUBE LA IMAGEN A https://cdn.russellxz.click/upload.php
+        const form = new FormData();
+        form.append('file', media, {
+            filename: "hd.jpg",
+            contentType: mime,
+        });
+        const upload = await axios.post('https://cdn.russellxz.click/upload.php', form, {
+            headers: form.getHeaders()
+        });
+        if (!upload.data?.url) throw new Error('No se obtuvo URL al subir al CDN.');
+        const imageUrl = upload.data.url;
+
+        // ENVÍA LA URL AL ENDPOINT DE REMINI
+        const hasil = await remini(imageUrl);
         if (!hasil.status) throw new Error(hasil.msg);
 
-        // Descargar la imagen mejorada como buffer
-        const fetch = require('node-fetch');
+        // DESCARGA LA IMAGEN MEJORADA COMO BUFFER
         const bufferHD = await fetch(hasil.data.url).then(res => res.buffer());
 
         await shoNherly('¡La calidad de la imagen se ha mejorado con éxito! ✅');
         await shoNhe.sendMessage(m.chat, {
             image: bufferHD,
             caption: "*AQUÍ TIENE LA IMAGEN EN HD*\n\nˢᶦ ˡᵃ ᶦᵐᵃᵍᵉⁿ ⁿᵒ ˢᵃˡᵉ ᵉˡ ᴴᴰ ʳᵉˢᵖᵒⁿᵈᵉ ᵃ ˡᵃ ᶦᵐᵃᵍᵉⁿ ᶜᵒⁿ ᵉˡ ᶜᵒᵐᵃⁿᵈᵒ ᵈᵉ ⁿᵘᵉᵛᵒ"
-        }, { quoted: m })
+        }, { quoted: m });
     } catch (err) {
         console.log(err);
         shoNherly('Se produjo un error en el servidor.');
