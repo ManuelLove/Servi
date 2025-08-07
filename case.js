@@ -50,8 +50,7 @@
 //===================[ TEMPAT MODULE ]=====================\\
 require("./config")
 require("./tampilanmenu")
-const
-{
+const {
 	downloadContentFromMessage,
 	BufferJSON,
 	WA_DEFAULT_EPHEMERAL,
@@ -62,7 +61,8 @@ const
 	prepareWAMessageMedia,
 	areJidsSameUser,
 	InteractiveMessage,
-	getContentType
+	getContentType,
+	jidDecode           // <---- ¡AÑADE AQUÍ!
 } = require("@adiwajshing/baileys")
 const fs = require('fs');
 const path = require('path');
@@ -2483,8 +2483,8 @@ default: `https://eliasar-yt-api.vercel.app/api/levelup?avatar=${encodeURICompon
 						mentionedJid: [m.sender],
 						"externalAdReply":
 						{
-							"title": `BOT BY TechFix'S`,
-							"body": `© ManuDia'z`,
+							"title": waktuucapan,
+							"body": `𝙏𝙚𝙘𝙝𝙁𝙞𝙭 🅥❺`,
 							"previewType": "PHOTO",
 							"thumbnail": getRandomThumb2(),
 							"sourceUrl": gh
