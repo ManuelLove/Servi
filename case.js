@@ -62,12 +62,17 @@ const {
 	areJidsSameUser,
 	InteractiveMessage,
 	getContentType,
-	jidDecode           // <---- ¡AÑADE AQUÍ!
+	jidDecode
 } = require("@adiwajshing/baileys")
 const fs = require('fs');
 const path = require('path');
 global.c = '`'
 const pickRandom = (arr) =>
+global.mostrarNumero = function(id) {
+  const dec = jidDecode(id);
+  if (dec && dec.user) return dec.user; // Solo el número, ej: 573012345678
+  return id; // Si no puede decodificar, devuelve el original
+}
 {
 	return arr[Math.floor(Math.random() * arr.length)];
 };
@@ -477,11 +482,13 @@ if (m.mtype === 'interactiveResponseMessage' && m.message.interactiveResponseMes
 		const text = q = args.join(" ")
 		const isGroup = m && m.isGroup ? m.isGroup : false;
 		const sender = m.key.fromMe ? (shoNhe.user.id.split(':')[0] + '@s.whatsapp.net' || shoNhe.user.id) : (m.key.participant || m.key.remoteJid)
-		const botNumber = await shoNhe.decodeJid(shoNhe.user.id)
-		const senderNumber = sender.split('@')[0]
-		const isCreator = (m && m.sender && [botNumber, ...global.nomerOwner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)) || false;
-		const pushname = m.pushName || `${senderNumber}`
-		const isBot = botNumber.includes(senderNumber)
+		const botNumber = jidDecode(shoNhe.user.id)?.user || shoNhe.user.id;
+const senderNumber = jidDecode(sender)?.user || sender;
+		const ownerNumbers = [botNumber, ...global.nomerOwner].map(n => n.replace(/[^0-9]/g, ''));
+const senderOnlyNumber = senderNumber.replace(/[^0-9]/g, '');
+const isCreator = (m && m.sender && ownerNumbers.includes(senderOnlyNumber)) || false;
+		const pushname = m.pushName || senderNumber;
+		const isBot = botNumber.replace(/[^0-9]/g, '') === senderNumber.replace(/[^0-9]/g, '');
 		const prem = JSON.parse(fs.readFileSync("./database/premium.json"))
 		const Vip = JSON.parse(fs.readFileSync('./database/premium.json'))
 		const owner = JSON.parse(fs.readFileSync('./owner.json'))
