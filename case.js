@@ -69,10 +69,14 @@ const path = require('path');
 global.c = '`'
 const pickRandom = (arr) =>
 global.mostrarNumero = function(id) {
-  const dec = jidDecode(id);
-  if (dec && dec.user) return dec.user; // Solo el número, ej: 573012345678
-  return id; // Si no puede decodificar, devuelve el original
-}
+  try {
+    const dec = jidDecode(id);
+    if (dec && dec.user) return dec.user;
+    return id;
+  } catch {
+    return id;
+  }
+};
 {
 	return arr[Math.floor(Math.random() * arr.length)];
 };
