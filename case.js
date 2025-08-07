@@ -67,7 +67,6 @@ const {
 const fs = require('fs');
 const path = require('path');
 global.c = '`'
-const pickRandom = (arr) =>
 global.mostrarNumero = function(id) {
   try {
     const dec = jidDecode(id);
@@ -77,6 +76,7 @@ global.mostrarNumero = function(id) {
     return id;
   }
 };
+const pickRandom = (arr) =>
 {
 	return arr[Math.floor(Math.random() * arr.length)];
 };
