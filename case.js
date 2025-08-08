@@ -1372,7 +1372,7 @@ await shoNhe.sendMessage(m.chat, {
 					}
 				});
 				// Fetch data dari API
-				let response = await fetch(`https://api.siputzx.my.id/api/d/ytmp4?url=${link}`);
+				let response = await fetch(`https://api.neoxr.eu/api/youtube?url=${link}&type=video&quality=720p&apikey=ManuVPSxx`);
 				let textResponse = await response.text();
 				// Validasi apakah respons adalah JSON
 				let data;
@@ -1394,7 +1394,7 @@ await shoNhe.sendMessage(m.chat, {
 					{
 						video:
 						{
-							url: data.data.dl
+							url: data.data.url
 						},
 						caption: ''
 					},
