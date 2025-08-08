@@ -1443,9 +1443,9 @@ await shoNhe.sendMessage(m.chat, {
 					return;
 				}
 				console.log('📥 Respons diterima dari API:', data);
-				if (data.status && data.data.dl)
+				if (data.status && data.data.url)
 				{
-					const fileUrl = data.data.dl;
+					const fileUrl = data.data.url;
 					const fileName = 'audio.mp3';
 					const fixedFileName = 'fixed_audio.mp3';
 					const filePath = path.join(__dirname, fileName);
