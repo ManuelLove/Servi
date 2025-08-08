@@ -21373,7 +21373,7 @@ if (levelUpMessage) {
 				{
 					url: media
 				}).catch((err) => fs.unlinkSync(media))
-				shoNherly('Listo')
+				shoNherly('udah')
 				if (levelUpMessage) {
         await shoNhe.sendMessage(m.chat,
 				{
