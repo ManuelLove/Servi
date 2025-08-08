@@ -1,15 +1,3 @@
-function getNumber(jid) {
-  if (!jid) return '';
-  return jid.split('@')[0];
-}
-function isChatGroup(jid) {
-  return jid && (
-    jid.endsWith('@g.us') ||
-    jid.endsWith('@lid') ||
-    jid.endsWith('@lib') ||
-    jid.endsWith('@chatlib')
-  );
-}
 // CREATOR : YUDA & TNGX
 // TQTO? DI COMMAND TQTO
 // BIG THX TO : GALANGz, TNGXAJA[Nhe], ORANG TUA, ALLAH, PENYEDIA REST API, PENYEDIA BASE AWAL
@@ -486,47 +474,31 @@ if (m.mtype === 'interactiveResponseMessage' && m.message.interactiveResponseMes
 		const command = body.replace(prefix, '').trim().split(/ +/).shift().toLowerCase()
 		const args = body.trim().split(/ +/).slice(1)
 		const text = q = args.join(" ")
-		const chatJid = m && m.key ? m.key.remoteJid : (m.chat || m.jid);
-const isGroup = isChatGroup(chatJid);
-const sender = m.key.fromMe ? (shoNhe.user.id.split(':')[0] + '@s.whatsapp.net' || shoNhe.user.id) : (m.key.participant || m.key.remoteJid);
-const botNumber = getNumber(await shoNhe.decodeJid(shoNhe.user.id)); // solo número puro
-const senderNumber = getNumber(sender); // siempre será solo el número
-		// NOTA: Esto va después de definir senderNumber, botNumber (como ya te indiqué)
-
-// Si global.nomerOwner es un array de números puros:
-const isCreator = (m && m.sender && [botNumber, ...(global.nomerOwner || [])].includes(senderNumber)) || false;
-
-const pushname = m.pushName || `${senderNumber}`;
-const isBot = botNumber === senderNumber; // compara solo número
-
-const prem = JSON.parse(fs.readFileSync("./database/premium.json"));
-const Vip = prem; // Puedes eliminar esto si es igual que prem
-
-const owner = JSON.parse(fs.readFileSync('./owner.json'));
-const isShoNheOwn = owner.includes(senderNumber) || isBot;
-const isVip = prem.includes(senderNumber) || isShoNheOwn;
-
-// Ahora la validación de baneados debe usar senderNumber
-const banned = JSON.parse(fs.readFileSync('./database/banned.json'));
-const isBan = banned.includes(senderNumber); // solo número
+		const isGroup = m && m.isGroup ? m.isGroup : false;
+		const sender = m.key.fromMe ? (shoNhe.user.id.split(':')[0] + '@s.whatsapp.net' || shoNhe.user.id) : (m.key.participant || m.key.remoteJid)
+		const botNumber = await shoNhe.decodeJid(shoNhe.user.id)
+		const senderNumber = sender.split('@')[0]
+		const isCreator = (m && m.sender && [botNumber, ...global.nomerOwner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)) || false;
+		const pushname = m.pushName || `${senderNumber}`
+		const isBot = botNumber.includes(senderNumber)
+		const prem = JSON.parse(fs.readFileSync("./database/premium.json"))
+		const Vip = JSON.parse(fs.readFileSync('./database/premium.json'))
+		const owner = JSON.parse(fs.readFileSync('./owner.json'))
+		const isShoNheOwn = owner.includes(senderNumber) || isBot
+		const isVip = prem.includes(senderNumber) || isShoNheOwn
+		const banned = JSON.parse(fs.readFileSync('./database/banned.json'));
+const isBan = banned.includes(m.sender) || banned.includes("@" + m.sender);
 if (isBan && !isShoNheOwn) return;
-
-const getQuoted = (m.quoted || m);
+		const getQuoted = (m.quoted || m);
 		const quoted = (getQuoted.type == 'buttonsMessage') ? getQuoted[Object.keys(getQuoted)[1]] : (getQuoted.type == 'templateMessage') ? getQuoted.hydratedTemplate[Object.keys(getQuoted.hydratedTemplate)[1]] : (getQuoted.type == 'product') ? getQuoted[Object.keys(getQuoted)[0]] : m.quoted ? m.quoted : m
 		const mime = (quoted.msg || quoted).mimetype || ''
-		let groupMetadata = '';
-let participants = [];
-if (isGroup) {
-  groupMetadata = await shoNhe.groupMetadata(chatJid).catch(e => {});
-  participants = groupMetadata && groupMetadata.participants ? groupMetadata.participants : [];
-}
-const groupName = isGroup ? groupMetadata.subject : '';
-// Nuevo: admins universales (multi-dispositivo)
-const adminNumbers = participants
-  .filter(p => p.admin)
-  .flatMap(p => [getNumber(p.id), getNumber(p.lid)]);
-const isBotAdmins = isGroup ? adminNumbers.includes(botNumber) : false;
-const isAdmins = isGroup ? adminNumbers.includes(senderNumber) : false;
+		const groupMetadata = m.isGroup ? await shoNhe.groupMetadata(from).catch(e =>
+		{}) : ''
+		const groupName = m.isGroup ? groupMetadata.subject : ''
+		const participants = m.isGroup ? await groupMetadata.participants : ''
+		const groupAdmins = m.isGroup ? await getGroupAdmins(participants) : ''
+		const isBotAdmins = m.isGroup ? groupAdmins.includes(botNumber) : false
+		const isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
 		const qmsg = (quoted.msg || quoted)
 		const isMedia = /image|video|sticker|audio/.test(mime);
 		const isImage = (type == 'imageMessage');
@@ -21373,7 +21345,7 @@ if (levelUpMessage) {
 				{
 					url: media
 				}).catch((err) => fs.unlinkSync(media))
-				shoNherly('udah')
+				shoNherly('Listo')
 				if (levelUpMessage) {
         await shoNhe.sendMessage(m.chat,
 				{
