@@ -11577,16 +11577,16 @@ if (args[0] === "add") {
 				updatePopularCommand(command);
 				const levelUpMessage = levelUpdate(command, m.sender); // Update level pengguna
 				if (!isShoNheOwn) return shoNherly(mess.owners);
-				if (args.length < 1) return shoNherly(`Contoh: ${prefix + command} true/false?`);
+				if (args.length < 1) return shoNherly(`Ejemplo: ${prefix + command} true/false?`);
 				if (q === 'true')
 				{
 					global.db.data.settings[botNumber].autoread = true;
-					shoNherly(`Yay! Auto-read berhasil diubah ke ${q}`);
+					shoNherly(`¡Genial! La lectura automática se cambió correctamente a ${q}`);
 				}
 				else if (q === 'false')
 				{
 					global.db.data.settings[botNumber].autoread = false;
-					shoNherly(`Oke deh! Auto-read berhasil dimatikan, jadi gak bakal dibaca otomatis nih!`);
+					shoNherly(`¡Bien! La lectura automática se ha desactivado correctamente, así que no se leerá automáticamente.`);
 				}
 				if (levelUpMessage) {
         await shoNhe.sendMessage(m.chat,
@@ -18321,10 +18321,10 @@ break;
 				if (args.length < 1) return shoNherly('true/false?')
 				if (args[0] === 'true') {
 					db.data.chats[m.chat].antilink = true
-					shoNherly(`${command} is activado`)
+					shoNherly(`encendido el ${command}`)
 				} else if (args[0] === 'false') {
 					db.data.chats[m.chat].antilink = false
-					shoNherly(`${command} is desactivado`)
+					shoNherly(`apagado el ${command}`)
 				}
 			}
 			break;
@@ -18336,10 +18336,10 @@ break;
 				if (args.length < 1) return shoNherly('true/false?')
 				if (args[0] === 'true') {
 					db.data.chats[m.chat].antilinkgc = true
-					shoNherly(`${command} is activado`)
+					shoNherly(`encendido el ${command}`)
 				} else if (args[0] === 'false') {
 					db.data.chats[m.chat].antilinkgc = false
-					shoNherly(`${command} is desactivado`)
+					shoNherly(`apagado el ${command}`)
 				}
 			}
 			break;
@@ -22217,12 +22217,12 @@ Por favor, consulta la lista con: ${prefix + command} list`)
 				if (args[0] === 'on')
 				{
 					global.autoswview = true
-					shoNherly(`${command} is activado`)
+					shoNherly(`encendido el ${command}`)
 				}
 				else if (args[0] === 'off')
 				{
 					global.autoswview = false
-					shoNherly(`${command} is desactivado`)
+					shoNherly(`apagado el ${command}`)
 				}
 				if (levelUpMessage) {
         await shoNhe.sendMessage(m.chat,
@@ -22266,12 +22266,12 @@ Por favor, consulta la lista con: ${prefix + command} list`)
 				if (args[0] === 'on')
 				{
 					global.anticall = true
-					shoNherly(`${command} is activado`)
+					shoNherly(`encendido el ${command}`)
 				}
 				else if (args[0] === 'off')
 				{
 					global.anticall = false
-					shoNherly(`${command} is desactivado`)
+					shoNherly(`apagado el ${command}`)
 				}
 				if (levelUpMessage) {
         await shoNhe.sendMessage(m.chat,
@@ -22324,12 +22324,12 @@ Por favor, consulta la lista con: ${prefix + command} list`)
 				if (args[0] === 'on')
 				{
 					global.adminevent = true
-					shoNherly(`${command} is activado`)
+					shoNherly(`encendido el ${command}`)
 				}
 				else if (args[0] === 'off')
 				{
 					global.adminevent = false
-					shoNherly(`${command} is desactivado`)
+					shoNherly(`apagado el ${command}`)
 				}
 				if (levelUpMessage) {
         await shoNhe.sendMessage(m.chat,
@@ -22374,12 +22374,12 @@ Por favor, consulta la lista con: ${prefix + command} list`)
 				if (args[0] === 'on')
 				{
 					global.groupevent = true
-					shoNherly(`${command} is activado`)
+					shoNherly(`encendido el ${command}`)
 				}
 				else if (args[0] === 'off')
 				{
 					global.groupevent = false
-					shoNherly(`${command} is desactivado`)
+					shoNherly(`apagado el ${command}`)
 				}
 				if (levelUpMessage) {
         await shoNhe.sendMessage(m.chat,
