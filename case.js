@@ -8141,7 +8141,7 @@ break;
 					}
 					else
 					{
-						global.db.data.settings[botNumber].autoBio = true;
+						global.autoBio = true;
 						shoNherly('✅ ¡Auto bio activado con éxito!');
 					}
 				}
@@ -8153,7 +8153,7 @@ break;
 					}
 					else
 					{
-						global.db.data.settings[botNumber].autoBio = false;
+						global.autoBio = false;
 						shoNherly('✅ ¡La biografía automática se deshabilitó con éxito!');
 					}
 				}
@@ -11570,6 +11570,12 @@ if (args[0] === "add") {
 			break
 			case 'autoread':
 			{
+				if (!isRegistered(m))
+				{
+					return sendRegister(shoNhe, m, prefix, namabot);
+				}
+				updatePopularCommand(command);
+				const levelUpMessage = levelUpdate(command, m.sender); // Update level pengguna
 				if (!isShoNheOwn) return shoNherly(mess.owners);
 				if (args.length < 1) return shoNherly(`Contoh: ${prefix + command} true/false?`);
 				if (q === 'true')
@@ -22210,12 +22216,12 @@ Por favor, consulta la lista con: ${prefix + command} list`)
 				if (args.length < 1) return shoNherly('on/off?')
 				if (args[0] === 'on')
 				{
-					global.db.data.settings[botNumber].autoswview = true
+					global.autoswview = true
 					shoNherly(`${command} is activado`)
 				}
 				else if (args[0] === 'off')
 				{
-					global.db.data.settings[botNumber].autoswview = false
+					global.autoswview = false
 					shoNherly(`${command} is desactivado`)
 				}
 				if (levelUpMessage) {
@@ -22259,12 +22265,12 @@ Por favor, consulta la lista con: ${prefix + command} list`)
 				if (args.length < 1) return shoNherly('on/off?')
 				if (args[0] === 'on')
 				{
-					global.db.data.settings[botNumber].anticall = true
+					global.anticall = true
 					shoNherly(`${command} is activado`)
 				}
 				else if (args[0] === 'off')
 				{
-					global.db.data.settings[botNumber].anticall = false
+					global.anticall = false
 					shoNherly(`${command} is desactivado`)
 				}
 				if (levelUpMessage) {
@@ -22317,12 +22323,12 @@ Por favor, consulta la lista con: ${prefix + command} list`)
 				if (args.length < 1) return shoNherly('on/off?')
 				if (args[0] === 'on')
 				{
-					global.db.data.settings[botNumber].adminevent = true
+					global.adminevent = true
 					shoNherly(`${command} is activado`)
 				}
 				else if (args[0] === 'off')
 				{
-					global.db.data.settings[botNumber].adminevent = false
+					global.adminevent = false
 					shoNherly(`${command} is desactivado`)
 				}
 				if (levelUpMessage) {
