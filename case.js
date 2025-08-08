@@ -61,21 +61,11 @@ const {
 	prepareWAMessageMedia,
 	areJidsSameUser,
 	InteractiveMessage,
-	getContentType,
-	jidDecode
+	getContentType
 } = require("@adiwajshing/baileys")
 const fs = require('fs');
 const path = require('path');
 global.c = '`'
-global.mostrarNumero = function(id) {
-  try {
-    const dec = jidDecode(id);
-    if (dec && dec.user) return dec.user;
-    return id;
-  } catch {
-    return id;
-  }
-};
 const pickRandom = (arr) =>
 {
 	return arr[Math.floor(Math.random() * arr.length)];
@@ -486,13 +476,11 @@ if (m.mtype === 'interactiveResponseMessage' && m.message.interactiveResponseMes
 		const text = q = args.join(" ")
 		const isGroup = m && m.isGroup ? m.isGroup : false;
 		const sender = m.key.fromMe ? (shoNhe.user.id.split(':')[0] + '@s.whatsapp.net' || shoNhe.user.id) : (m.key.participant || m.key.remoteJid)
-		const botNumber = jidDecode(shoNhe.user.id)?.user || shoNhe.user.id;
-const senderNumber = jidDecode(sender)?.user || sender;
-		const ownerNumbers = [botNumber, ...global.nomerOwner].map(n => n.replace(/[^0-9]/g, ''));
-const senderOnlyNumber = senderNumber.replace(/[^0-9]/g, '');
-const isCreator = (m && m.sender && ownerNumbers.includes(senderOnlyNumber)) || false;
-		const pushname = m.pushName || senderNumber;
-		const isBot = botNumber.replace(/[^0-9]/g, '') === senderNumber.replace(/[^0-9]/g, '');
+		const botNumber = await shoNhe.decodeJid(shoNhe.user.id)
+		const senderNumber = sender.split('@')[0]
+		const isCreator = (m && m.sender && [botNumber, ...global.nomerOwner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)) || false;
+		const pushname = m.pushName || `${senderNumber}`
+		const isBot = botNumber.includes(senderNumber)
 		const prem = JSON.parse(fs.readFileSync("./database/premium.json"))
 		const Vip = JSON.parse(fs.readFileSync('./database/premium.json'))
 		const owner = JSON.parse(fs.readFileSync('./owner.json'))
@@ -1441,7 +1429,7 @@ await shoNhe.sendMessage(m.chat, {
 					}
 				});
 				// Panggil API untuk mendapatkan URL file
-				let response = await fetch(`https://api.siputzx.my.id/api/d/ytmp3?url=${link}`);
+				let response = await fetch(`https://api.neoxr.eu/api/youtube?url=${link}&type=audio&quality=128kbps&apikey=ManuVPSxx`);
 				let textResponse = await response.text();
 				let data;
 				try
